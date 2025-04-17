@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -57,7 +59,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
         </svg>
         <h3 className="text-2xl font-bold text-gray-800 mb-2">No more cars to show</h3>
-        <p className="text-gray-600 text-center mb-6">You've seen all available cars matching your preferences.</p>
+        <p className="text-gray-600 text-center mb-6">You&apos;ve seen all available cars matching your preferences.</p>
         <div className="flex space-x-4">
           <button 
             onClick={() => {

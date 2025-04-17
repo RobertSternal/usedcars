@@ -195,7 +195,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <p className="text-gray-600 mb-6">"I found my dream car on UsedCars at an incredible price. The process was smooth, and the customer service was exceptional!"</p>
+              <p className="text-gray-600 mb-6">&quot;I found my dream car on UsedCars at an incredible price. The process was smooth, and the customer service was exceptional!&quot;</p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
                 <div>
@@ -215,7 +215,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <p className="text-gray-600 mb-6">"Selling my car through UsedCars was incredibly easy. I got a fair price and the transaction was completed within days. Highly recommend!"</p>
+              <p className="text-gray-600 mb-6">&quot;Selling my car through UsedCars was incredibly easy. I got a fair price and the transaction was completed within days. Highly recommend!&quot;</p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
                 <div>
@@ -235,7 +235,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <p className="text-gray-600 mb-6">"The Car Finder feature helped me discover exactly what I was looking for. The whole experience was seamless from start to finish."</p>
+              <p className="text-gray-600 mb-6">&quot;The Car Finder feature helped me discover exactly what I was looking for. The whole experience was seamless from start to finish.&quot;</p>
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
                 <div>
