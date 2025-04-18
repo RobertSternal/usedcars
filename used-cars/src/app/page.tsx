@@ -74,12 +74,12 @@ const featuredCars = [
 ];
 
 const popularBrands = [
-  { name: "BMW", logo: "/brands/bmw.png" },
-  { name: "Audi", logo: "/brands/audi.png" },
-  { name: "Mercedes-Benz", logo: "/brands/mercedes.png" },
-  { name: "Volkswagen", logo: "/brands/vw.png" },
-  { name: "Toyota", logo: "/brands/toyota.png" },
-  { name: "Honda", logo: "/brands/honda.png" },
+  { name: "BMW", logo: "/images/cars/bmw.svg" },
+  { name: "Audi", logo: "/images/cars/audi.svg" },
+  { name: "Mercedes-Benz", logo: "/images/cars/mercedes.svg" },
+  { name: "Volkswagen", logo: "/images/cars/volkswagen.svg" },
+  { name: "Toyota", logo: "/images/cars/toyota.svg" },
+  { name: "Honda", logo: "/images/cars/honda.svg" },
 ];
 
 export default function Home() {
