@@ -5,6 +5,9 @@ import { useState } from 'react';
 export default function CarFilter() {
   const [priceRange, setPriceRange] = useState([0, 500000]);
   const [yearRange, setYearRange] = useState([1990, 2025]);
+  const [engineExpanded, setEngineExpanded] = useState(false);
+  const [powerRange, setPowerRange] = useState([50, 500]);
+  const [capacityRange, setCapacityRange] = useState([1.0, 6.0]);
   
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -150,6 +153,93 @@ export default function CarFilter() {
             <span className="text-sm text-gray-700">Electric</span>
           </label>
         </div>
+      </div>
+      
+      {/* Engine Section - Collapsible */}
+      <div className="mb-6">
+        <button 
+          onClick={() => setEngineExpanded(!engineExpanded)}
+          className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 mb-2 hover:text-blue-600 focus:outline-none"
+        >
+          <span>Engine</span>
+          {engineExpanded ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          )}
+        </button>
+        
+        {engineExpanded && (
+          <div className="pt-2 pb-4 space-y-4 border-t border-gray-200">
+            {/* Engine Power Filter */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Power (HP)
+                </label>
+                <span className="text-sm text-gray-500">
+                  {powerRange[0]} HP - {powerRange[1]} HP
+                </span>
+              </div>
+              <div className="flex space-x-4">
+                <input
+                  type="range"
+                  min="50"
+                  max="500"
+                  step="10"
+                  value={powerRange[0]}
+                  onChange={(e) => setPowerRange([parseInt(e.target.value), powerRange[1]])}
+                  className="w-full"
+                />
+                <input
+                  type="range"
+                  min="50"
+                  max="500"
+                  step="10"
+                  value={powerRange[1]}
+                  onChange={(e) => setPowerRange([powerRange[0], parseInt(e.target.value)])}
+                  className="w-full"
+                />
+              </div>
+            </div>
+            
+            {/* Engine Capacity Filter */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Capacity (L)
+                </label>
+                <span className="text-sm text-gray-500">
+                  {capacityRange[0].toFixed(1)} L - {capacityRange[1].toFixed(1)} L
+                </span>
+              </div>
+              <div className="flex space-x-4">
+                <input
+                  type="range"
+                  min="1.0"
+                  max="6.0"
+                  step="0.1"
+                  value={capacityRange[0]}
+                  onChange={(e) => setCapacityRange([parseFloat(e.target.value), capacityRange[1]])}
+                  className="w-full"
+                />
+                <input
+                  type="range"
+                  min="1.0"
+                  max="6.0"
+                  step="0.1"
+                  value={capacityRange[1]}
+                  onChange={(e) => setCapacityRange([capacityRange[0], parseFloat(e.target.value)])}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Transmission Filter */}
