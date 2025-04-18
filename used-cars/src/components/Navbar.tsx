@@ -1,20 +1,10 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Navbar() {
   return (
     <nav className="bg-white shadow-md py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="relative w-10 h-10">
-            <Image
-              src="/logo.png"
-              alt="UsedCars Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
+        <Link href="/" className="flex items-center">
           <span className="text-xl font-bold text-gray-800">UsedCars</span>
         </Link>
         

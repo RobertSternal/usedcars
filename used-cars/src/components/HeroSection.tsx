@@ -7,8 +7,8 @@ export default function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/hero-car.jpg"
-          alt="Luxury car on road"
+          src="/images/revuelto.jpg"
+          alt="Lamborghini Revuelto supercar"
           fill
           priority
           className="object-cover"
