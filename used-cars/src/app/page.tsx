@@ -197,7 +197,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;I found my dream car on UsedCars at an incredible price. The process was smooth, and the customer service was exceptional!&quot;</p>
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <Image src="/images/aston-martin.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Anna Kowalska</h4>
                   <p className="text-gray-500 text-sm">Warszawa</p>
@@ -217,7 +217,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;Selling my car through UsedCars was incredibly easy. I got a fair price and the transaction was completed within days. Highly recommend!&quot;</p>
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <Image src="/images/revuelto.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Piotr Nowak</h4>
                   <p className="text-gray-500 text-sm">Kraków</p>
@@ -237,7 +237,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;The Car Finder feature helped me discover exactly what I was looking for. The whole experience was seamless from start to finish.&quot;</p>
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <Image src="/images/user1.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Marta Wiśniewska</h4>
                   <p className="text-gray-500 text-sm">Gdańsk</p>
