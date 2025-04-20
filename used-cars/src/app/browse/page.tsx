@@ -18,7 +18,7 @@ const cars = [
     price: 249000,
     mileage: 15000,
     location: "Warszawa",
-    imageUrl: "/cars/bmw-3.jpg",
+    imageUrl: "/images/auction-photos/bmw2022.jpg",
   },
   {
     id: "2",
@@ -29,7 +29,7 @@ const cars = [
     price: 219000,
     mileage: 25000,
     location: "Kraków",
-    imageUrl: "/cars/audi-a4.jpg",
+    imageUrl: "/images/auction-photos/audia4.jpg",
   },
   {
     id: "3",
@@ -40,7 +40,7 @@ const cars = [
     price: 289000,
     mileage: 5000,
     location: "Poznań",
-    imageUrl: "/cars/mercedes-c.jpg",
+    imageUrl: "/images/auction-photos/cclass.jpg",
   },
   {
     id: "4",
@@ -51,7 +51,7 @@ const cars = [
     price: 179000,
     mileage: 18000,
     location: "Wrocław",
-    imageUrl: "/cars/vw-golf.jpg",
+    imageUrl: "/images/auction-photos/gti2022.jpg",
   },
   {
     id: "5",
@@ -62,7 +62,7 @@ const cars = [
     price: 199000,
     mileage: 10000,
     location: "Gdańsk",
-    imageUrl: "/cars/toyota-rav4.jpg",
+    imageUrl: "/images/auction-photos/rav4.jpg",
   },
   {
     id: "6",
@@ -73,7 +73,7 @@ const cars = [
     price: 169000,
     mileage: 20000,
     location: "Łódź",
-    imageUrl: "/cars/mazda-cx5.jpg",
+    imageUrl: "/images/auction-photos/cx5.jpg",
   },
   {
     id: "7",
@@ -84,7 +84,7 @@ const cars = [
     price: 139000,
     mileage: 30000,
     location: "Katowice",
-    imageUrl: "/cars/honda-civic.jpg",
+    imageUrl: "/images/auction-photos/a7.jpg",
   },
   {
     id: "8",
