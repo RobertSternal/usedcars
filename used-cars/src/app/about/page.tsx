@@ -63,7 +63,7 @@ export default function AboutPage() {
             <div className="md:w-1/2 relative">
               <div className="h-64 md:h-full relative">
                 <Image
-                  src="/mission.jpg"
+                  src="/images/bmw5.jpg"
                   alt="Handshake over car keys"
                   fill
                   className="object-cover"

@@ -171,7 +171,7 @@ export default function BrowsePage() {
                 <label htmlFor="sort" className="text-sm text-gray-600">Sort by:</label>
                 <select 
                   id="sort"
-                  className="border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="border border-gray-300 rounded-md p-2 text-sm text-gray-900 font-medium focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
