@@ -5,7 +5,9 @@ export default function Navbar() {
     <nav className="bg-white shadow-md py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
-          <span className="text-xl font-bold text-gray-800">UsedCars</span>
+          <div className="flex items-center">
+            <span className="text-2xl font-extrabold tracking-wide uppercase bg-gradient-to-r from-gray-900 to-blue-700 bg-clip-text text-transparent">USEDCARS</span>
+          </div>
         </Link>
         
         <div className="hidden md:flex space-x-8">
