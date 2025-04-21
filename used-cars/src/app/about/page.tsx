@@ -15,7 +15,7 @@ export default function AboutPage() {
         <div className="relative rounded-2xl overflow-hidden mb-16">
           <div className="relative h-[400px] w-full">
             <Image
-              src="/about-hero.jpg"
+              src="/images/revuelto.jpg"
               alt="Team of automotive professionals"
               fill
               className="object-cover"
@@ -38,7 +38,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Story</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+            <div className="w-20 h-1 bg-blue-700 mx-auto"></div>
           </div>
           
           <div className="prose prose-lg max-w-none text-gray-600">
@@ -90,13 +90,13 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Values</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+            <div className="w-20 h-1 bg-blue-700 mx-auto"></div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
@@ -108,7 +108,7 @@ export default function AboutPage() {
             
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -120,7 +120,7 @@ export default function AboutPage() {
             
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
@@ -136,7 +136,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Meet Our Team</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
+            <div className="w-20 h-1 bg-blue-700 mx-auto mb-6"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Our diverse team of automotive experts, tech innovators, and customer service professionals work together to deliver the best possible experience.
             </p>
@@ -154,7 +154,7 @@ export default function AboutPage() {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-800">Jan Kowalski</h3>
-                <p className="text-blue-600 mb-2">CEO & Founder</p>
+                <p className="text-blue-700 mb-2">CEO & Founder</p>
                 <p className="text-gray-600 text-sm">
                   Automotive engineer with 15+ years of industry experience.
                 </p>
@@ -172,7 +172,7 @@ export default function AboutPage() {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-800">Anna Nowak</h3>
-                <p className="text-blue-600 mb-2">CTO</p>
+                <p className="text-blue-700 mb-2">CTO</p>
                 <p className="text-gray-600 text-sm">
                   Tech visionary with expertise in AI and platform development.
                 </p>
@@ -190,7 +190,7 @@ export default function AboutPage() {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-800">Piotr Wiśniewski</h3>
-                <p className="text-blue-600 mb-2">Marketing Director</p>
+                <p className="text-blue-700 mb-2">Marketing Director</p>
                 <p className="text-gray-600 text-sm">
                   Digital marketing expert specializing in automotive industry.
                 </p>
@@ -208,7 +208,7 @@ export default function AboutPage() {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-800">Magdalena Dąbrowska</h3>
-                <p className="text-blue-600 mb-2">Customer Success</p>
+                <p className="text-blue-700 mb-2">Customer Success</p>
                 <p className="text-gray-600 text-sm">
                   Dedicated to ensuring exceptional experiences for all users.
                 </p>
@@ -218,7 +218,7 @@ export default function AboutPage() {
         </div>
         
         {/* Stats */}
-        <div className="bg-blue-600 rounded-xl p-8 mb-20 text-white">
+        <div className="bg-blue-700 rounded-xl p-8 mb-20 text-white">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold mb-4">UsedCars by the Numbers</h2>
             <p className="text-blue-100 max-w-2xl mx-auto">
@@ -253,7 +253,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Contact Us</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
+            <div className="w-20 h-1 bg-blue-700 mx-auto mb-6"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Have questions or feedback? Our team is here to help. Reach out to us using any of the methods below.
             </p>
@@ -262,36 +262,36 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Phone</h3>
               <p className="text-gray-600 mb-2">Customer Support</p>
-              <p className="text-blue-600 font-medium">+48 123 456 789</p>
+              <p className="text-blue-700 font-medium">+48 123 456 789</p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Email</h3>
               <p className="text-gray-600 mb-2">Send us a message</p>
-              <p className="text-blue-600 font-medium">contact@usedcars.com</p>
+              <p className="text-blue-700 font-medium">contact@usedcars.com</p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Office</h3>
               <p className="text-gray-600 mb-2">Visit our headquarters</p>
-              <p className="text-blue-600 font-medium">123 Car Street, Warszawa</p>
+              <p className="text-blue-700 font-medium">123 Car Street, Warszawa</p>
             </div>
           </div>
         </div>
@@ -305,7 +305,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
               href="/browse"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-medium text-lg transition"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>

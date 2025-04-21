@@ -195,7 +195,7 @@ export default function BrowsePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
-                <button className="p-2 border-t border-b border-gray-300 bg-blue-600 text-white">1</button>
+                <button className="p-2 border-t border-b border-gray-300 bg-blue-700 text-white">1</button>
                 <button className="p-2 border-t border-b border-gray-300 hover:bg-gray-100">2</button>
                 <button className="p-2 border-t border-b border-gray-300 hover:bg-gray-100">3</button>
                 <button className="p-2 border border-gray-300 rounded-r-md hover:bg-gray-100">

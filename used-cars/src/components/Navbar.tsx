@@ -11,25 +11,25 @@ export default function Navbar() {
         </Link>
         
         <div className="hidden md:flex space-x-8">
-          <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition">
+          <Link href="/" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Home
           </Link>
-          <Link href="/browse" className="text-gray-700 hover:text-blue-600 font-medium transition">
+          <Link href="/browse" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Browse Cars
           </Link>
-          <Link href="/discover" className="text-gray-700 hover:text-blue-600 font-medium transition">
+          <Link href="/discover" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Car Finder
           </Link>
-          <Link href="/sell" className="text-gray-700 hover:text-blue-600 font-medium transition">
+          <Link href="/sell" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Sell Your Car
           </Link>
-          <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium transition">
+          <Link href="/about" className="text-gray-700 hover:text-blue-700 font-medium transition">
             About Us
           </Link>
         </div>
         
         <div className="flex items-center space-x-4">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition">
+          <button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md font-medium transition">
             Sign In
           </button>
           <button className="md:hidden">

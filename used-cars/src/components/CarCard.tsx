@@ -33,7 +33,7 @@ export default function CarCard({
           fill
           className="object-cover"
         />
-        <div className="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded text-sm font-bold">
+        <div className="absolute top-3 right-3 bg-blue-700 text-white px-2 py-1 rounded text-sm font-bold">
           {new Intl.NumberFormat('pl-PL', {
             style: 'currency',
             currency: 'PLN',
@@ -71,7 +71,7 @@ export default function CarCard({
         <div className="flex justify-between">
           <Link 
             href={`/cars/${id}`}
-            className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+            className="text-blue-700 hover:text-blue-800 font-medium text-sm"
           >
             View Details
           </Link>

@@ -123,7 +123,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-white">Popular Cars</h2>
             <Link 
               href="/browse"
-              className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+              className="text-white hover:text-gray-200 font-medium flex items-center"
             >
               View All
               <svg className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -141,7 +141,7 @@ export default function Home() {
       </section>
       
       {/* Why Choose Us */}
-      <section className="py-16 bg-blue-600 text-white">
+      <section className="py-16 bg-blue-700 text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">Why Choose UsedCars</h2>
           
@@ -256,7 +256,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
               href="/browse"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-medium text-lg transition"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>
