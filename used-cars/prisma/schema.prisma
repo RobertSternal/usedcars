@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  name              String?
+  phone             String?
+  profileImage      String?
+  role              String    @default("USER") // USER, ADMIN, DEALER
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  cars              Car[]             // Cars listed by this user
+  favorites         Favorite[]        // Cars favorited by this user
+  reviews           Review[]          // Reviews written by this user
+  receivedReviews   Review[]   @relation("UserReviewed")
+  messages          Message[]         // Messages sent by this user
+  receivedMessages  Message[]  @relation("MessageRecipient")
+}
+
+// Car model
+model Car {
+  id                String    @id @default(cuid())
+  title             String
+  brand             String
+  model             String
+  year              Int
+  price             Float
+  mileage           Int
+  fuelType          String    // PETROL, DIESEL, ELECTRIC, HYBRID, LPG, OTHER
+  transmission      String    // MANUAL, AUTOMATIC, SEMI_AUTOMATIC
+  bodyType          String    // SEDAN, HATCHBACK, SUV, COUPE, CONVERTIBLE, WAGON, VAN, TRUCK, OTHER
+  color             String
+  description       String    @db.Text
+  location          String
+  condition         String    // NEW, EXCELLENT, VERY_GOOD, GOOD, FAIR, POOR
+  engineSize        Float?
+  power             Int?      // Power in HP
+  doors             Int?
+  seats             Int?
+  features          String?   @db.Text  // JSON string of features
+  sellerNotes       String?   @db.Text
+  status            String    @default("ACTIVE") // ACTIVE, SOLD, PENDING, INACTIVE
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  sellerId          String
+  seller            User      @relation(fields: [sellerId], references: [id])
+  images            CarImage[]
+  favorites         Favorite[]
+  reviews           Review[]
+}
+
+model CarImage {
+  id                String    @id @default(cuid())
+  url               String
+  isPrimary         Boolean   @default(false)
+  carId             String
+  car               Car       @relation(fields: [carId], references: [id], onDelete: Cascade)
+  createdAt         DateTime  @default(now())
+}
+
+model Favorite {
+  id                String    @id @default(cuid())
+  userId            String
+  carId             String
+  createdAt         DateTime  @default(now())
+  
+  user              User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  car               Car       @relation(fields: [carId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, carId])
+}
+
+model Review {
+  id                String    @id @default(cuid())
+  rating            Int       // 1-5 stars
+  comment           String?   @db.Text
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // For car reviews
+  carId             String?
+  car               Car?      @relation(fields: [carId], references: [id], onDelete: SetNull)
+  
+  // For user reviews
+  authorId          String
+  author            User      @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reviewedUserId    String?
+  reviewedUser      User?     @relation("UserReviewed", fields: [reviewedUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Message {
+  id                String    @id @default(cuid())
+  content           String    @db.Text
+  isRead            Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  
+  senderId          String
+  sender            User      @relation(fields: [senderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  recipientId       String
+  recipient         User      @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
