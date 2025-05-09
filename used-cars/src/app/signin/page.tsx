@@ -32,11 +32,14 @@ export default function SignIn() {
         throw new Error(data.error || 'Failed to sign in');
       }
 
-      // Store token in localStorage
+      // Save token and user data to localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Redirect to home page or dashboard
+      // Dispatch custom event to notify other components about login state change
+      window.dispatchEvent(new Event('loginStateChange'));
+
+      // Redirect to home page
       router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
