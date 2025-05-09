@@ -104,16 +104,29 @@ export async function POST(request: Request) {
     
     console.log('Authentication successful');
     
-    // Return user data and token
-    return NextResponse.json({
+    // Create response with user data
+    const response = NextResponse.json({
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
         role: user.role,
       },
-      token,
+      success: true
     });
+    
+    // Set the token as a cookie
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 86400, // 1 day in seconds
+      path: '/'
+    });
+    
+    return response;
   } catch (error) {
     console.error('Sign-in error:', error);
     return NextResponse.json(

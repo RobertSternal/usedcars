@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const cars = await prisma.car.findMany({
+    const { searchParams } = new URL(request.url);
+    const sellerId = searchParams.get('sellerId');
+    
+    // Build the query with optional filters
+    const query: any = {
+      where: {},
       include: {
         seller: {
           select: {
@@ -16,7 +21,17 @@ export async function GET() {
         },
         images: true,
       },
-    });
+      orderBy: {
+        createdAt: 'desc' as const,
+      },
+    };
+    
+    // Add sellerId filter if provided
+    if (sellerId) {
+      query.where.sellerId = sellerId;
+    }
+    
+    const cars = await prisma.car.findMany(query);
 
     return NextResponse.json(cars);
   } catch (error) {

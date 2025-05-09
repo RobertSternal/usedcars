@@ -1,12 +1,131 @@
-import { Metadata } from 'next';
-import Image from 'next/image';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Sell Your Car | UsedCars',
-  description: 'List your vehicle for sale on Poland\'s premier car marketplace.',
-};
+import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SellPage() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    brand: '',
+    model: '',
+    year: '',
+    mileage: '',
+    fuelType: '',
+    price: '',
+    location: '',
+    description: '',
+    transmission: '',
+    bodyType: '',
+    name: '',
+    phone: '',
+    email: '',
+    terms: false
+  });
+  const [images, setImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: checked
+    }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const fileArray = Array.from(e.target.files);
+      setImages(fileArray);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    
+    try {
+      // First, get the current user's information
+      const userResponse = await fetch('/api/auth/me');
+      
+      if (!userResponse.ok) {
+        const errorData = await userResponse.json();
+        console.error('Authentication error:', errorData);
+        throw new Error('You must be logged in to create a listing');
+      }
+      
+      const userData = await userResponse.json();
+      console.log('User data retrieved:', userData);
+      
+      // In a real application, you would upload images to a storage service
+      // and get back URLs to store in the database
+      const mockImageUrls = images.map((_, index) => 
+        `https://example.com/car-image-${index}.jpg`
+      );
+      
+      // Prepare data for API
+      const carData = {
+        title: `${formData.brand} ${formData.model} ${formData.year}`,
+        brand: formData.brand,
+        model: formData.model,
+        year: parseInt(formData.year),
+        price: parseFloat(formData.price),
+        mileage: parseInt(formData.mileage),
+        fuelType: formData.fuelType,
+        transmission: formData.transmission,
+        bodyType: formData.bodyType,
+        description: formData.description,
+        location: formData.location,
+        // Use the current user's ID from the authentication system
+        sellerId: userData.id,
+        images: mockImageUrls,
+        // Additional fields that would be collected in a more detailed form
+        color: 'Not specified',
+        condition: 'USED',
+        engineSize: null,
+        power: null,
+        doors: null,
+        seats: null,
+        features: [],
+        sellerNotes: ''
+      };
+      
+      const response = await fetch('/api/cars', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create listing');
+      }
+      
+      setSuccess(true);
+      // Redirect to homepage or listing page after successful submission
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
+      
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="bg-gray-50 py-10">
       <div className="container mx-auto px-4">
@@ -98,7 +217,17 @@ export default function SellPage() {
             </div>
             
             <div className="p-8 md:w-2/3">
-              <form>
+              <form onSubmit={handleSubmit}>
+                {error && (
+                  <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
+                    Your listing has been successfully created! Redirecting...
+                  </div>
+                )}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Information</h3>
                   
@@ -111,6 +240,8 @@ export default function SellPage() {
                         id="brand" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.brand}
+                        onChange={handleChange}
                       >
                         <option value="">Select Brand</option>
                         <option value="audi">Audi</option>
@@ -136,6 +267,8 @@ export default function SellPage() {
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. Golf, 3 Series"
                         required
+                        value={formData.model}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -149,6 +282,8 @@ export default function SellPage() {
                         id="year" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.year}
+                        onChange={handleChange}
                       >
                         <option value="">Select Year</option>
                         {[...Array(30)].map((_, i) => (
@@ -169,6 +304,8 @@ export default function SellPage() {
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. 50000"
                         required
+                        value={formData.mileage}
+                        onChange={handleChange}
                       />
                     </div>
                     
@@ -177,9 +314,11 @@ export default function SellPage() {
                         Fuel Type *
                       </label>
                       <select 
-                        id="fuel" 
+                        id="fuelType" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.fuelType}
+                        onChange={handleChange}
                       >
                         <option value="">Select Fuel Type</option>
                         <option value="petrol">Petrol</option>
@@ -206,6 +345,8 @@ export default function SellPage() {
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. 50000"
                         required
+                        value={formData.price}
+                        onChange={handleChange}
                       />
                     </div>
                     
@@ -219,6 +360,8 @@ export default function SellPage() {
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. Warszawa"
                         required
+                        value={formData.location}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -237,6 +380,8 @@ export default function SellPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       placeholder="Describe your vehicle in detail. Include condition, features, service history, etc."
                       required
+                      value={formData.description}
+                      onChange={handleChange}
                     ></textarea>
                   </div>
                   
@@ -249,6 +394,8 @@ export default function SellPage() {
                         id="transmission" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.transmission}
+                        onChange={handleChange}
                       >
                         <option value="">Select Transmission</option>
                         <option value="automatic">Automatic</option>
@@ -262,9 +409,11 @@ export default function SellPage() {
                         Body Type *
                       </label>
                       <select 
-                        id="body-type" 
+                        id="bodyType" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.bodyType}
+                        onChange={handleChange}
                       >
                         <option value="">Select Body Type</option>
                         <option value="sedan">Sedan</option>
@@ -293,10 +442,22 @@ export default function SellPage() {
                     <p className="mt-1 text-xs text-gray-700">
                       Upload up to 10 photos (Max 5MB each)
                     </p>
-                    <input type="file" className="hidden" multiple accept="image/*" />
-                    <button type="button" className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <input 
+                      type="file" 
+                      id="car-images" 
+                      className="hidden" 
+                      multiple 
+                      accept="image/*" 
+                      onChange={handleImageChange} 
+                    />
+                    <label htmlFor="car-images" className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
                       Select Files
-                    </button>
+                    </label>
+                    {images.length > 0 && (
+                      <div className="mt-4">
+                        <p className="text-sm text-green-600">{images.length} file(s) selected</p>
+                      </div>
+                    )}
                   </div>
                 </div>
                 
@@ -313,6 +474,8 @@ export default function SellPage() {
                         id="name" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.name}
+                        onChange={handleChange}
                       />
                     </div>
                     
@@ -325,6 +488,8 @@ export default function SellPage() {
                         id="phone" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.phone}
+                        onChange={handleChange}
                       />
                     </div>
                     
@@ -337,6 +502,8 @@ export default function SellPage() {
                         id="email" 
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
+                        value={formData.email}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -348,6 +515,8 @@ export default function SellPage() {
                     id="terms" 
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     required
+                    checked={formData.terms}
+                    onChange={handleCheckbox}
                   />
                   <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                     I agree to the <a href="#" className="text-blue-700 hover:underline">Terms and Conditions</a> and <a href="#" className="text-blue-700 hover:underline">Privacy Policy</a>
@@ -358,8 +527,9 @@ export default function SellPage() {
                   <button 
                     type="submit"
                     className="w-full bg-blue-700 hover:bg-blue-800 text-white py-3 px-4 rounded-md font-medium transition"
+                    disabled={loading}
                   >
-                    Submit Listing
+                    {loading ? 'Submitting...' : 'Submit Listing'}
                   </button>
                 </div>
               </form>
