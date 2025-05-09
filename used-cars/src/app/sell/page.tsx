@@ -100,16 +100,16 @@ export default function SellPage() {
             <div className="p-8 md:w-2/3">
               <form>
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Vehicle Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Information</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="brand" className="block text-sm font-medium text-gray-900 mb-1">
                         Brand *
                       </label>
                       <select 
                         id="brand" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       >
                         <option value="">Select Brand</option>
@@ -127,13 +127,13 @@ export default function SellPage() {
                     </div>
                     
                     <div>
-                      <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="model" className="block text-sm font-medium text-gray-900 mb-1">
                         Model *
                       </label>
                       <input 
                         type="text" 
                         id="model" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. Golf, 3 Series"
                         required
                       />
@@ -142,12 +142,12 @@ export default function SellPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="year" className="block text-sm font-medium text-gray-900 mb-1">
                         Year *
                       </label>
                       <select 
                         id="year" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       >
                         <option value="">Select Year</option>
@@ -160,25 +160,25 @@ export default function SellPage() {
                     </div>
                     
                     <div>
-                      <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="mileage" className="block text-sm font-medium text-gray-900 mb-1">
                         Mileage (km) *
                       </label>
                       <input 
                         type="number" 
                         id="mileage" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. 50000"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label htmlFor="fuel" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="fuel" className="block text-sm font-medium text-gray-900 mb-1">
                         Fuel Type *
                       </label>
                       <select 
                         id="fuel" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       >
                         <option value="">Select Fuel Type</option>
@@ -193,30 +193,30 @@ export default function SellPage() {
                 </div>
                 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Pricing & Location</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Pricing & Location</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="price" className="block text-sm font-medium text-gray-900 mb-1">
                         Price (PLN) *
                       </label>
                       <input 
                         type="number" 
                         id="price" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. 50000"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="location" className="block text-sm font-medium text-gray-900 mb-1">
                         Location *
                       </label>
                       <input 
                         type="text" 
                         id="location" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="e.g. Warszawa"
                         required
                       />
@@ -225,16 +225,16 @@ export default function SellPage() {
                 </div>
                 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Vehicle Details</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Details</h3>
                   
                   <div className="mb-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-900 mb-1">
                       Description *
                     </label>
                     <textarea 
                       id="description" 
                       rows={4}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       placeholder="Describe your vehicle in detail. Include condition, features, service history, etc."
                       required
                     ></textarea>
@@ -242,12 +242,12 @@ export default function SellPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="transmission" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="transmission" className="block text-sm font-medium text-gray-900 mb-1">
                         Transmission *
                       </label>
                       <select 
                         id="transmission" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       >
                         <option value="">Select Transmission</option>
@@ -258,12 +258,12 @@ export default function SellPage() {
                     </div>
                     
                     <div>
-                      <label htmlFor="body-type" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="body-type" className="block text-sm font-medium text-gray-900 mb-1">
                         Body Type *
                       </label>
                       <select 
                         id="body-type" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       >
                         <option value="">Select Body Type</option>
@@ -281,16 +281,16 @@ export default function SellPage() {
                 </div>
                 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Photos</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Photos</h3>
                   
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                     <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p className="mt-1 text-sm text-gray-600">
+                    <p className="mt-1 text-sm text-gray-800">
                       Drag and drop images here, or click to select files
                     </p>
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-700">
                       Upload up to 10 photos (Max 5MB each)
                     </p>
                     <input type="file" className="hidden" multiple accept="image/*" />
@@ -301,41 +301,41 @@ export default function SellPage() {
                 </div>
                 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Contact Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-1">
                         Name *
                       </label>
                       <input 
                         type="text" 
                         id="name" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-1">
                         Phone Number *
                       </label>
                       <input 
                         type="tel" 
                         id="phone" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       />
                     </div>
                     
                     <div className="md:col-span-2">
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
                         Email *
                       </label>
                       <input 
                         type="email" 
                         id="email" 
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         required
                       />
                     </div>
@@ -349,7 +349,7 @@ export default function SellPage() {
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     required
                   />
-                  <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+                  <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                     I agree to the <a href="#" className="text-blue-700 hover:underline">Terms and Conditions</a> and <a href="#" className="text-blue-700 hover:underline">Privacy Policy</a>
                   </label>
                 </div>
