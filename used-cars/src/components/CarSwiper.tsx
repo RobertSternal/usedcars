@@ -71,7 +71,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
             Start Over
           </button>
           <Link 
-            href="/usedcars/browse" 
+            href="/browse" 
             className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition"
           >
             Browse All Cars
@@ -143,7 +143,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
           </div>
           
           <Link 
-            href={`/usedcars/cars/${currentCar.id}`}
+            href={`/cars/${currentCar.id}`}
             className="block w-full bg-gray-100 hover:bg-gray-200 text-center text-gray-800 py-3 rounded-lg font-medium transition"
           >
             View Full Details

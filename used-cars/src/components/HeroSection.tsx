@@ -41,19 +41,19 @@ export default function HeroSection() {
           
           <div className="flex flex-wrap gap-4">
             <Link
-              href="/usedcars/browse"
+              href="/browse"
               className="bg-white text-gray-800 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition"
             >
               Browse All Cars
             </Link>
             <Link
-              href="/usedcars/sell"
+              href="/sell"
               className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-md font-medium transition"
             >
               Sell Your Car
             </Link>
             <Link
-              href="/usedcars/discover"
+              href="/discover"
               className="bg-transparent hover:bg-white/20 border border-white text-white px-6 py-3 rounded-md font-medium transition"
             >
               Car Finder

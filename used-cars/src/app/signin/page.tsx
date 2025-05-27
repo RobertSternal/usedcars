@@ -40,7 +40,7 @@ export default function SignIn() {
       window.dispatchEvent(new Event('loginStateChange'));
 
       // Redirect to home page
-      router.push('/usedcars/');
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -67,7 +67,7 @@ export default function SignIn() {
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               Or{' '}
-              <Link href="/usedcars/signup" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+              <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                 create a new account
               </Link>
             </p>
@@ -155,7 +155,7 @@ export default function SignIn() {
               </div>
 
               <div className="text-sm">
-                <Link href="/usedcars/forgot-password" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                   Forgot your password?
                 </Link>
               </div>
@@ -184,9 +184,9 @@ export default function SignIn() {
           
           <div className="pt-2 text-center text-xs text-gray-500">
             By signing in, you agree to our{' '}
-            <Link href="/usedcars/terms" className="text-blue-600 hover:text-blue-500 transition-colors">Terms of Service</Link>
+            <Link href="/terms" className="text-blue-600 hover:text-blue-500 transition-colors">Terms of Service</Link>
             {' '}and{' '}
-            <Link href="/usedcars/privacy" className="text-blue-600 hover:text-blue-500 transition-colors">Privacy Policy</Link>
+            <Link href="/privacy" className="text-blue-600 hover:text-blue-500 transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>

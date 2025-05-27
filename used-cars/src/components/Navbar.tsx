@@ -55,7 +55,7 @@ export default function Navbar() {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     setUserName('');
-    router.push('/usedcars/');
+    router.push('/');
   };
 
   const toggleMobileMenu = () => {
@@ -65,26 +65,26 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link href="/usedcars/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <div className="flex items-center">
             <span className="text-2xl font-extrabold tracking-wide uppercase bg-gradient-to-r from-gray-900 to-blue-700 bg-clip-text text-transparent">USEDCARS</span>
           </div>
         </Link>
         
         <div className="hidden md:flex space-x-8">
-          <Link href="/usedcars/" className="text-gray-700 hover:text-blue-700 font-medium transition">
+          <Link href="/" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Home
           </Link>
-          <Link href="/usedcars/browse" className="text-gray-700 hover:text-blue-700 font-medium transition">
+          <Link href="/browse" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Browse Cars
           </Link>
-          <Link href="/usedcars/discover" className="text-gray-700 hover:text-blue-700 font-medium transition">
+          <Link href="/discover" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Car Finder
           </Link>
-          <Link href="/usedcars/sell" className="text-gray-700 hover:text-blue-700 font-medium transition">
+          <Link href="/sell" className="text-gray-700 hover:text-blue-700 font-medium transition">
             Sell Your Car
           </Link>
-          <Link href="/usedcars/about" className="text-gray-700 hover:text-blue-700 font-medium transition">
+          <Link href="/about" className="text-gray-700 hover:text-blue-700 font-medium transition">
             About Us
           </Link>
         </div>
@@ -104,13 +104,13 @@ export default function Navbar() {
               {/* Dropdown menu */}
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-10 opacity-0 scale-95 transform origin-top-right transition-all duration-200 invisible group-hover:opacity-100 group-hover:scale-100 group-hover:visible">
                 <div className="py-1">
-                  <Link href="/usedcars/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
+                  <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
                     Profile
                   </Link>
-                  <Link href="/usedcars/sell" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
+                  <Link href="/sell" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
                     My Listings
                   </Link>
-                  <Link href="/usedcars/favorites" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
+                  <Link href="/favorites" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
                     Favorites
                   </Link>
                   <button 
@@ -123,7 +123,7 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <Link href="/usedcars/signin" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md font-medium transition">
+            <Link href="/signin" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md font-medium transition">
               Sign In
             </Link>
           )}

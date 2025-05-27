@@ -33,27 +33,27 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/usedcars/" className="text-gray-400 hover:text-white transition">
+                <Link href="/" className="text-gray-400 hover:text-white transition">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/browse" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse" className="text-gray-400 hover:text-white transition">
                   Browse Cars
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/discover" className="text-gray-400 hover:text-white transition">
+                <Link href="/discover" className="text-gray-400 hover:text-white transition">
                   Car Finder
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/sell" className="text-gray-400 hover:text-white transition">
+                <Link href="/sell" className="text-gray-400 hover:text-white transition">
                   Sell Your Car
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/about" className="text-gray-400 hover:text-white transition">
+                <Link href="/about" className="text-gray-400 hover:text-white transition">
                   About Us
                 </Link>
               </li>
@@ -64,27 +64,27 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Popular Brands</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/usedcars/browse?brand=toyota" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse?brand=toyota" className="text-gray-400 hover:text-white transition">
                   Toyota
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/browse?brand=honda" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse?brand=honda" className="text-gray-400 hover:text-white transition">
                   Honda
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/browse?brand=bmw" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse?brand=bmw" className="text-gray-400 hover:text-white transition">
                   BMW
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/browse?brand=audi" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse?brand=audi" className="text-gray-400 hover:text-white transition">
                   Audi
                 </Link>
               </li>
               <li>
-                <Link href="/usedcars/browse?brand=mercedes" className="text-gray-400 hover:text-white transition">
+                <Link href="/browse?brand=mercedes" className="text-gray-400 hover:text-white transition">
                   Mercedes-Benz
                 </Link>
               </li>
