@@ -7,8 +7,8 @@ export async function GET(request: NextRequest) {
     const sellerId = searchParams.get('sellerId');
     
     // Build the query with optional filters
-    const query: any = {
-      where: {},
+    const query = {
+      where: {} as { sellerId?: string },
       include: {
         seller: {
           select: {

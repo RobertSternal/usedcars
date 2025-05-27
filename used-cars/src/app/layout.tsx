@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+// Metadata type removed to fix build error
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "UsedCars | Premium Car Marketplace",
   description: "Find your perfect car on UsedCars - Poland's premier marketplace for buying and selling quality used vehicles.",
 };

@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').Config} */
+const nextConfig = {
   /* config options here */
+  basePath: '/usedcars',
 };
 
 export default nextConfig;

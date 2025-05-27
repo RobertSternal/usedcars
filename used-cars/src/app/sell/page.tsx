@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+// Image import removed as it's not being used
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 

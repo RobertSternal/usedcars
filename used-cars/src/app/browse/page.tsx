@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import CarCard from '@/components/CarCard';
 import CarFilter from '@/components/CarFilter';
 import prisma from '@/lib/prisma';
@@ -31,7 +31,7 @@ async function getCars() {
       price: car.price,
       mileage: car.mileage,
       location: car.location,
-      imageUrl: car.images[0]?.url || '/images/auction-photos/car-placeholder.jpg'
+      imageUrl: car.images[0]?.url || '/usedcars/images/auction-photos/car-placeholder.jpg'
     }));
   } catch (error) {
     console.error('Error fetching cars:', error);

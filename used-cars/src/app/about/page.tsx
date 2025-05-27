@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ export default function AboutPage() {
         <div className="relative rounded-2xl overflow-hidden mb-16">
           <div className="relative h-[400px] w-full">
             <Image
-              src="/images/revuelto.jpg"
+              src="/usedcars/images/revuelto.jpg"
               alt="Team of automotive professionals"
               fill
               className="object-cover"
@@ -63,7 +63,7 @@ export default function AboutPage() {
             <div className="md:w-1/2 relative">
               <div className="h-64 md:h-full relative">
                 <Image
-                  src="/images/bmw5.jpg"
+                  src="/usedcars/images/bmw5.jpg"
                   alt="Handshake over car keys"
                   fill
                   className="object-cover"
@@ -304,13 +304,13 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              href="/browse"
+              href="/usedcars/browse"
               className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>
             <Link 
-              href="/sell"
+              href="/usedcars/sell"
               className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Sell Your Car

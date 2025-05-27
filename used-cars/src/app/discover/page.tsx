@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import CarSwiper from '@/components/CarSwiper';
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ const cars = [
     price: 249000,
     mileage: 15000,
     location: "Warszawa",
-    imageUrl: "/images/auction-photos/bmw2022.jpg",
+    imageUrl: "/usedcars/images/auction-photos/bmw2022.jpg",
     description: "This stunning BMW 3 Series combines luxury, performance, and efficiency. The M Sport package adds a sporty touch to this executive sedan.",
     features: ["Leather Interior", "Navigation System", "LED Headlights", "Parking Sensors", "Bluetooth", "Climate Control"],
   },
@@ -30,7 +30,7 @@ const cars = [
     price: 219000,
     mileage: 25000,
     location: "Kraków",
-    imageUrl: "/images/auction-photos/audia4.jpg",
+    imageUrl: "/usedcars/images/auction-photos/audia4.jpg",
     description: "This Audi A4 Quattro offers exceptional handling with its all-wheel drive system and refined interior comfort for a premium driving experience.",
     features: ["All-Wheel Drive", "Virtual Cockpit", "Bang & Olufsen Sound", "Heated Seats", "Parking Camera", "Lane Assist"],
   },
@@ -43,7 +43,7 @@ const cars = [
     price: 289000,
     mileage: 5000,
     location: "Poznań",
-    imageUrl: "/images/auction-photos/cclass.jpg",
+    imageUrl: "/usedcars/images/auction-photos/cclass.jpg",
     description: "Nearly new Mercedes-Benz C-Class with premium features and elegant design. Experience luxury and cutting-edge technology.",
     features: ["MBUX Infotainment", "Ambient Lighting", "Wireless Charging", "Keyless Entry", "Leather Seats", "Panoramic Roof"],
   },
@@ -56,7 +56,7 @@ const cars = [
     price: 179000,
     mileage: 18000,
     location: "Wrocław",
-    imageUrl: "/images/auction-photos/gti2022.jpg",
+    imageUrl: "/usedcars/images/auction-photos/gti2022.jpg",
     description: "The iconic Golf GTI in its latest generation. Combines everyday practicality with exhilarating performance and modern technology.",
     features: ["Digital Cockpit", "Sport Suspension", "LED Matrix Headlights", "Tartan Seats", "Apple CarPlay", "Android Auto"],
   },
@@ -69,7 +69,7 @@ const cars = [
     price: 199000,
     mileage: 10000,
     location: "Gdańsk",
-    imageUrl: "/images/auction-photos/rav4.jpg",
+    imageUrl: "/usedcars/images/auction-photos/rav4.jpg",
     description: "Efficient and eco-friendly Toyota RAV4 Hybrid SUV. Perfect balance of performance, space, and fuel economy for family adventures.",
     features: ["Hybrid Powertrain", "Toyota Safety Sense", "AWD System", "JBL Sound System", "Heated Seats", "Power Tailgate"],
   },
@@ -82,7 +82,7 @@ const cars = [
     price: 169000,
     mileage: 20000,
     location: "Łódź",
-    imageUrl: "/images/auction-photos/cx5.jpg",
+    imageUrl: "/usedcars/images/auction-photos/cx5.jpg",
     description: "Elegant and dynamic Mazda CX-5 with premium feel. Known for its responsive handling and beautiful design inside and out.",
     features: ["Bose Sound System", "Head-Up Display", "Leather Interior", "Blind Spot Monitoring", "Sunroof", "Heated Steering Wheel"],
   },

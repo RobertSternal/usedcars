@@ -26,7 +26,7 @@ export default function CarCard({
 }: CarCardProps) {
   return (
     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-[1.025] transition-all duration-300 ease-in-out transform-gpu group">
-      <Link href={`/cars/${id}`} className="block">
+      <Link href={`/usedcars/cars/${id}`} className="block">
         <div className="relative h-48 w-full">
           <Image
             src={imageUrl}

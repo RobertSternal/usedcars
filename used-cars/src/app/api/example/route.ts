@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma, createUser, createCar } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
+import { createUser, createCar } from '@/lib/utils';
 
 /**
  * Example API route that demonstrates how to use the Prisma client
  * with your SQL Server database
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get counts of records in each table
     const counts = await Promise.all([

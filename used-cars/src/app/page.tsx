@@ -14,7 +14,7 @@ const featuredCars = [
     price: 249000,
     mileage: 15000,
     location: "Warszawa",
-    imageUrl: "/images/auction-photos/bmw2022.jpg",
+    imageUrl: "/usedcars/images/auction-photos/bmw2022.jpg",
   },
   {
     id: "2",
@@ -25,7 +25,7 @@ const featuredCars = [
     price: 219000,
     mileage: 25000,
     location: "Kraków",
-    imageUrl: "/images/auction-photos/audia4.jpg",
+    imageUrl: "/usedcars/images/auction-photos/audia4.jpg",
   },
   {
     id: "3",
@@ -36,7 +36,7 @@ const featuredCars = [
     price: 289000,
     mileage: 5000,
     location: "Poznań",
-    imageUrl: "/images/auction-photos/cclass.jpg",
+    imageUrl: "/usedcars/images/auction-photos/cclass.jpg",
   },
   {
     id: "4",
@@ -47,7 +47,7 @@ const featuredCars = [
     price: 179000,
     mileage: 18000,
     location: "Wrocław",
-    imageUrl: "/images/auction-photos/gti2022.jpg",
+    imageUrl: "/usedcars/images/auction-photos/gti2022.jpg",
   },
   {
     id: "5",
@@ -58,7 +58,7 @@ const featuredCars = [
     price: 199000,
     mileage: 10000,
     location: "Gdańsk",
-    imageUrl: "/images/auction-photos/rav4.jpg",
+    imageUrl: "/usedcars/images/auction-photos/rav4.jpg",
   },
   {
     id: "6",
@@ -69,17 +69,17 @@ const featuredCars = [
     price: 169000,
     mileage: 20000,
     location: "Łódź",
-    imageUrl: "/images/auction-photos/cx5.jpg",
+    imageUrl: "/usedcars/images/auction-photos/cx5.jpg",
   },
 ];
 
 const popularBrands = [
-  { name: "BMW", logo: "/images/cars/bmw.svg" },
-  { name: "Audi", logo: "/images/cars/audi.svg" },
-  { name: "Mercedes-Benz", logo: "/images/cars/mercedes.svg" },
-  { name: "Volkswagen", logo: "/images/cars/volkswagen.svg" },
-  { name: "Toyota", logo: "/images/cars/toyota.svg" },
-  { name: "Honda", logo: "/images/cars/honda.svg" },
+  { name: "BMW", logo: "/usedcars/images/cars/bmw.svg" },
+  { name: "Audi", logo: "/usedcars/images/cars/audi.svg" },
+  { name: "Mercedes-Benz", logo: "/usedcars/images/cars/mercedes.svg" },
+  { name: "Volkswagen", logo: "/usedcars/images/cars/volkswagen.svg" },
+  { name: "Toyota", logo: "/usedcars/images/cars/toyota.svg" },
+  { name: "Honda", logo: "/usedcars/images/cars/honda.svg" },
 ];
 
 export default function Home() {
@@ -96,7 +96,7 @@ export default function Home() {
             {popularBrands.map((brand) => (
               <Link 
                 key={brand.name}
-                href={`/browse?brand=${brand.name.toLowerCase()}`}
+                href={`/usedcars/browse?brand=${brand.name.toLowerCase()}`}
                 className="flex flex-col items-center group"
               >
                 <div className="bg-white p-6 rounded-full shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300">
@@ -122,7 +122,7 @@ export default function Home() {
           <div className="flex justify-between items-center mb-12">
             <h2 className="text-3xl font-bold text-white">Popular Cars</h2>
             <Link 
-              href="/browse"
+              href="/usedcars/browse"
               className="text-white hover:text-gray-200 font-medium flex items-center"
             >
               View All
@@ -197,7 +197,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;I found my dream car on UsedCars at an incredible price. The process was smooth, and the customer service was exceptional!&quot;</p>
               <div className="flex items-center">
-                <Image src="/images/aston-martin.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
+                <Image src="/usedcars/images/aston-martin.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Anna Kowalska</h4>
                   <p className="text-gray-500 text-sm">Warszawa</p>
@@ -217,7 +217,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;Selling my car through UsedCars was incredibly easy. I got a fair price and the transaction was completed within days. Highly recommend!&quot;</p>
               <div className="flex items-center">
-                <Image src="/images/revuelto.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
+                <Image src="/usedcars/images/revuelto.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Piotr Nowak</h4>
                   <p className="text-gray-500 text-sm">Kraków</p>
@@ -237,7 +237,7 @@ export default function Home() {
               </div>
               <p className="text-gray-600 mb-6">&quot;The Car Finder feature helped me discover exactly what I was looking for. The whole experience was seamless from start to finish.&quot;</p>
               <div className="flex items-center">
-                <Image src="/images/user1.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
+                <Image src="/usedcars/images/user1.jpg" alt="Profile" width={48} height={48} className="w-12 h-12 rounded-full object-cover mr-4" />
                 <div>
                   <h4 className="font-bold text-gray-800">Marta Wiśniewska</h4>
                   <p className="text-gray-500 text-sm">Gdańsk</p>
@@ -255,13 +255,13 @@ export default function Home() {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Join thousands of satisfied customers who found their dream cars on UsedCars.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              href="/browse"
+              href="/usedcars/browse"
               className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>
             <Link 
-              href="/sell"
+              href="/usedcars/sell"
               className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Sell Your Car
