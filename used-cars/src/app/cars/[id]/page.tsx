@@ -1,125 +1,164 @@
 import type { Metadata } from 'next/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Car Details | UsedCars',
   description: 'View detailed information about this vehicle.',
 };
 
-// Sample car data with extended information
-const carsData = [
-  {
-    id: "1",
-    title: "BMW 3 Series 320d M Sport",
-    brand: "BMW",
-    model: "3 Series",
-    variant: "320d M Sport",
-    year: 2022,
-    price: 249000,
-    mileage: 15000,
-    location: "Warszawa",
-    seller: {
-      name: "Premium Auto",
-      type: "Dealer",
-      rating: 4.8,
-      phone: "+48 123 456 789",
-    },
-    engine: {
-      type: "Diesel",
-      capacity: "2.0L",
-      power: "190 HP",
-      transmission: "Automatic",
-      drive: "Rear-wheel drive",
-    },
-    exteriorColor: "Alpine White",
-    interiorColor: "Black Leather",
-    vin: "WBA8E9C55GK123456",
-    registration: "WA12345",
-    description: "This stunning BMW 3 Series combines luxury, performance, and efficiency. The M Sport package adds a sporty touch to this executive sedan. The car is in excellent condition with full service history and one previous owner. Features include leather interior, navigation system, LED headlights, and much more.",
-    features: [
-      "Leather Interior",
-      "Navigation System",
-      "LED Headlights",
-      "Parking Sensors",
-      "Bluetooth",
-      "Climate Control",
-      "Heated Seats",
-      "Alloy Wheels",
-      "Cruise Control",
-      "Start/Stop System",
-      "Keyless Entry",
-      "Digital Dashboard",
-    ],
-    images: [
-      "/cars/bmw-3.jpg",
-      "/cars/bmw-3-interior.jpg",
-      "/cars/bmw-3-back.jpg",
-      "/cars/bmw-3-side.jpg",
-      "/cars/bmw-3-engine.jpg",
-    ],
-    listedDate: "2025-04-10",
-  },
-  {
-    id: "2",
-    title: "Audi A4 2.0 TDI Quattro",
-    brand: "Audi",
-    model: "A4",
-    variant: "2.0 TDI Quattro",
-    year: 2021,
-    price: 219000,
-    mileage: 25000,
-    location: "Kraków",
-    seller: {
-      name: "AutoMax",
-      type: "Dealer",
-      rating: 4.6,
-      phone: "+48 987 654 321",
-    },
-    engine: {
-      type: "Diesel",
-      capacity: "2.0L",
-      power: "204 HP",
-      transmission: "Automatic",
-      drive: "All-wheel drive (Quattro)",
-    },
-    exteriorColor: "Glacier White",
-    interiorColor: "Brown Leather",
-    vin: "WAUZZZ8K9MA123456",
-    registration: "KR54321",
-    description: "This Audi A4 Quattro offers exceptional handling with its all-wheel drive system and refined interior comfort for a premium driving experience. The car comes with a comprehensive service history and has been meticulously maintained by its previous owner.",
-    features: [
-      "All-Wheel Drive",
-      "Virtual Cockpit",
-      "Bang & Olufsen Sound",
-      "Heated Seats",
-      "Parking Camera",
-      "Lane Assist",
-      "Adaptive Cruise Control",
-      "Matrix LED Headlights",
-      "Panoramic Sunroof",
-      "Wireless Charging",
-      "Ambient Lighting",
-      "Sport Suspension",
-    ],
-    images: [
-      "/cars/audi-a4.jpg",
-      "/cars/audi-a4-interior.jpg",
-      "/cars/audi-a4-back.jpg",
-      "/cars/audi-a4-side.jpg",
-      "/cars/audi-a4-engine.jpg",
-    ],
-    listedDate: "2025-04-08",
-  },
-];
+// Define the car data type
+interface CarImage {
+  id: string;
+  url: string;
+  isPrimary: boolean;
+  carId: string;
+}
+
+interface Seller {
+  id: string;
+  name: string | null;
+  email: string;
+  phone: string | null;
+  profileImage: string | null;
+  // For display purposes
+  type?: string;
+  rating?: number;
+}
+
+// Interfejs dla danych z bazy danych
+interface DbCar {
+  id: string;
+  title: string;
+  brand: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  fuelType: string;
+  transmission: string;
+  bodyType: string;
+  color: string;
+  description: string;
+  location: string;
+  condition: string;
+  engineSize: string | number | null;
+  power: string | number | null;
+  doors: number | null;
+  seats: number | null;
+  features: string | null;
+  sellerNotes: string | null;
+  status: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  sellerId: string;
+  seller: Seller;
+  images: CarImage[];
+}
+
+// Interfejs dla danych wyświetlanych w UI
+interface Car extends DbCar {
+  // Additional properties for display
+  exteriorColor: string;
+  interiorColor: string;
+  engine: {
+    type: string;
+    capacity: string;
+    power: string;
+    transmission: string;
+    drive: string;
+  };
+  listedDate: string;
+  vin?: string;
+  registration?: string;
+}
+
+// Importuj Prisma bezpośrednio w komponencie strony
+import prisma from '@/lib/prisma';
+
+// Function to fetch car data directly using Prisma
+async function getCarData(id: string): Promise<Car | null> {
+  try {
+    // Użyj bezpośrednio Prisma zamiast API route
+    const dbCar = await prisma.car.findUnique({
+      where: { id },
+      include: {
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            profileImage: true,
+          },
+        },
+        images: true,
+      },
+    });
+
+    if (!dbCar) {
+      return null;
+    }
+    
+    // Konwertuj dane z bazy danych na format UI
+    const car: Car = {
+      ...dbCar,
+      exteriorColor: dbCar.color,
+      interiorColor: 'Not specified',
+      engine: {
+        type: dbCar.fuelType || '',
+        capacity: String(dbCar.engineSize || ''),
+        power: String(dbCar.power || ''),
+        transmission: dbCar.transmission || '',
+        drive: dbCar.bodyType?.includes('4x4') ? 'All-wheel drive' : 'Front-wheel drive'
+      },
+      listedDate: new Date(dbCar.createdAt).toISOString().split('T')[0]
+    };
+    
+    return car;
+  } catch (error) {
+    console.error('Error fetching car data:', error);
+    return null;
+  }
+}
 
 // Disable ESLint for this specific case to avoid TypeScript issues with Next.js 15
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function CarDetailPage(props: any) {
+export default async function CarDetailPage(props: any) {
   // Extract id from params
   const paramId = props.params?.id || '1';
-  // In a real application, you would fetch this data from an API
-  const car = carsData.find((car) => car.id === paramId) || carsData[0];
+  
+  // Fetch car data from the API
+  const car = await getCarData(paramId);
+  
+  // If car data couldn't be fetched, show a 404 page
+  if (!car) {
+    notFound();
+  }
+  
+  // Parse features if they exist
+  const parsedFeatures = car.features ? JSON.parse(car.features) as string[] : [];
+  
+  // Set seller defaults if missing
+  if (!car.seller.type) {
+    car.seller.type = 'Private Seller';
+  }
+  
+  if (!car.seller.rating) {
+    car.seller.rating = 5.0;
+  }
+  
+  // Ensure car has a variant property or use model as fallback
+  const variant = car.model;
+  
+  // Default image if no images are available
+  const defaultImage = '/cars/default-car.jpg';
+  
+  // Get the primary image or the first image or default
+  const primaryImage = car.images.length > 0 
+    ? (car.images.find(img => img.isPrimary)?.url || car.images[0].url) 
+    : defaultImage;
   
   return (
     <div className="bg-gray-50 py-10">
@@ -140,7 +179,7 @@ export default function CarDetailPage(props: any) {
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{car.title}</h1>
             <p className="text-gray-600">
-              {car.year} • {car.mileage.toLocaleString()} km • {car.engine.type} • {car.location}
+              {car.year} • {car.mileage.toLocaleString()} km • {car.engine?.type || car.fuelType} • {car.location}
             </p>
           </div>
           <div className="mt-4 md:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg text-2xl font-bold">
@@ -160,7 +199,7 @@ export default function CarDetailPage(props: any) {
             <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
               <div className="relative h-[400px] w-full">
                 <Image
-                  src={car.images[0]}
+                  src={primaryImage}
                   alt={car.title}
                   fill
                   className="object-cover"
@@ -171,19 +210,30 @@ export default function CarDetailPage(props: any) {
             
             {/* Thumbnail Images */}
             <div className="grid grid-cols-5 gap-3 mb-8">
-              {car.images.map((image, index) => (
-                <div 
-                  key={index} 
-                  className="relative h-20 bg-white rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500 transition"
-                >
+              {car.images.length > 0 ? (
+                car.images.map((image, index) => (
+                  <div 
+                    key={index} 
+                    className="relative h-20 bg-white rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500 transition"
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`${car.title} - Image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="relative h-20 bg-white rounded-md overflow-hidden">
                   <Image
-                    src={image}
-                    alt={`${car.title} - Image ${index + 1}`}
+                    src={defaultImage}
+                    alt="No image available"
                     fill
                     className="object-cover"
                   />
                 </div>
-              ))}
+              )}
             </div>
             
             {/* Tabs */}
@@ -212,68 +262,72 @@ export default function CarDetailPage(props: any) {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">Vehicle Details</h3>
                     <ul className="space-y-2">
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Brand:</span>
-                        <span className="font-medium text-gray-800">{car.brand}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Model:</span>
-                        <span className="font-medium text-gray-800">{car.model}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Variant:</span>
-                        <span className="font-medium text-gray-800">{car.variant}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Year:</span>
-                        <span className="font-medium text-gray-800">{car.year}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Mileage:</span>
-                        <span className="font-medium text-gray-800">{car.mileage.toLocaleString()} km</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Exterior Color:</span>
-                        <span className="font-medium text-gray-800">{car.exteriorColor}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Interior Color:</span>
-                        <span className="font-medium text-gray-800">{car.interiorColor}</span>
-                      </li>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div>
+                          <span className="text-gray-500">Brand</span>
+                          <p className="font-medium">{car.brand}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Model</span>
+                          <p className="font-medium">{car.model}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Variant</span>
+                          <p className="font-medium">{variant}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Year</span>
+                          <p className="font-medium">{car.year}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Mileage</span>
+                          <p className="font-medium">{car.mileage.toLocaleString()} km</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Exterior Color</span>
+                          <p className="font-medium">{car.exteriorColor || car.color}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Interior Color</span>
+                          <p className="font-medium">{car.interiorColor || 'Not specified'}</p>
+                        </div>
+                      </div>
                     </ul>
                   </div>
                   
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">Engine & Performance</h3>
                     <ul className="space-y-2">
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Fuel Type:</span>
-                        <span className="font-medium text-gray-800">{car.engine.type}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Engine Capacity:</span>
-                        <span className="font-medium text-gray-800">{car.engine.capacity}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Power:</span>
-                        <span className="font-medium text-gray-800">{car.engine.power}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Transmission:</span>
-                        <span className="font-medium text-gray-800">{car.engine.transmission}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Drive Type:</span>
-                        <span className="font-medium text-gray-800">{car.engine.drive}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">VIN:</span>
-                        <span className="font-medium text-gray-800">{car.vin}</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="text-gray-600">Registration:</span>
-                        <span className="font-medium text-gray-800">{car.registration}</span>
-                      </li>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div>
+                          <span className="text-gray-500">Engine Type</span>
+                          <p className="font-medium">{car.engine?.type || car.fuelType}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Engine Capacity</span>
+                          <p className="font-medium">{car.engine?.capacity || car.engineSize}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Engine Power</span>
+                          <p className="font-medium">{car.engine?.power || car.power}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Transmission</span>
+                          <p className="font-medium">{car.engine?.transmission || car.transmission}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Drive</span>
+                          <p className="font-medium">{car.engine?.drive || (car.bodyType.includes('4x4') ? 'All-wheel drive' : 'Front-wheel drive')}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">VIN</span>
+                          <p className="font-medium">{car.vin || 'Not available'}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Registration</span>
+                          <p className="font-medium">{car.registration || 'Not available'}</p>
+                        </div>
+                      </div>
                     </ul>
                   </div>
                 </div>
@@ -284,15 +338,19 @@ export default function CarDetailPage(props: any) {
             <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
               <div className="p-6">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Features & Equipment</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-y-3">
-                  {car.features.map((feature, index) => (
-                    <div key={index} className="flex items-center">
-                      <svg className="h-5 w-5 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-gray-700">{feature}</span>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                  {parsedFeatures.length > 0 ? (
+                    parsedFeatures.map((feature: string, index: number) => (
+                      <div key={index} className="flex items-center">
+                        <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span>{feature}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-3 text-gray-500">No features listed</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -306,18 +364,19 @@ export default function CarDetailPage(props: any) {
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Seller Information</h2>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 font-bold text-xl mr-4">
-                    {car.seller.name.charAt(0)}
+                    {car.seller.name ? car.seller.name.charAt(0) : 'S'}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">{car.seller.name}</h3>
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-600 mr-2">{car.seller.type}</span>
-                      <div className="flex items-center">
-                        <svg className="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        <span className="text-sm text-gray-600 ml-1">{car.seller.rating}/5</span>
+                    <p className="text-gray-700 mb-1">{car.seller.type || 'Private Seller'}</p>
+                    <div className="flex items-center mb-3">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className={`w-4 h-4 ${i < Math.floor(car.seller.rating || 5) ? 'text-yellow-400' : 'text-gray-300'}`} fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
                       </div>
+                      <span className="text-gray-700 ml-1">{(car.seller.rating || 5).toFixed(1)}</span>
                     </div>
                   </div>
                 </div>
@@ -379,8 +438,8 @@ export default function CarDetailPage(props: any) {
             
             {/* Listed Date */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6 p-4 text-center">
-              <p className="text-gray-600">
-                Listed on {new Date(car.listedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+              <p className="text-gray-700 mb-4">
+                Listed on {new Date(car.listedDate || car.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </p>
             </div>
             
@@ -410,45 +469,7 @@ export default function CarDetailPage(props: any) {
           </div>
         </div>
         
-        {/* Similar Cars */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Similar Cars You Might Like</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {carsData.map((similarCar) => (
-              <div key={similarCar.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={similarCar.images[0]}
-                    alt={similarCar.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded text-sm font-bold">
-                    {new Intl.NumberFormat('pl-PL', {
-                      style: 'currency',
-                      currency: 'PLN',
-                      maximumFractionDigits: 0,
-                    }).format(similarCar.price)}
-                  </div>
-                </div>
-                <div className="p-4">
-                  <Link href={`/cars/${similarCar.id}`}>
-                    <h3 className="text-lg font-bold text-gray-800 hover:text-blue-600 transition mb-1 truncate">
-                      {similarCar.title}
-                    </h3>
-                  </Link>
-                  <p className="text-gray-600 text-sm mb-2">{similarCar.year} • {similarCar.mileage.toLocaleString()} km</p>
-                  <Link 
-                    href={`/cars/${similarCar.id}`}
-                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Similar Cars section removed - will be implemented later */}
       </div>
     </div>
   );
