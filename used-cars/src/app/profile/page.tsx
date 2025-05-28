@@ -53,7 +53,7 @@ export default function Profile() {
     const storedUser = localStorage.getItem('user');
     
     if (!token || !storedUser) {
-      router.push('/usedcars/signin');
+      router.push('/signin');
       return;
     }
 
@@ -67,7 +67,7 @@ export default function Profile() {
       console.error('Failed to parse user data:', error);
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      router.push('/usedcars/signin');
+      router.push('/signin');
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export default function Profile() {
   const handleSignOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    router.push('/usedcars/');
+    router.push('/');
   };
 
   if (loading) {
@@ -157,7 +157,7 @@ export default function Profile() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                 </svg>
                 <p className="text-gray-600 mb-4">You don&apos;t have any car listings yet.</p>
-                <Link href="/usedcars/sell" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <Link href="/sell" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                   Sell Your Car
                 </Link>
               </div>
@@ -200,7 +200,7 @@ export default function Profile() {
                       
                       <div className="flex justify-between items-center mt-4">
                         <span className="text-gray-600 text-sm">{new Date(car.createdAt).toLocaleDateString()}</span>
-                        <Link href={`/usedcars/cars/${car.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        <Link href={`/cars/${car.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                           View Details
                         </Link>
                       </div>
@@ -212,7 +212,7 @@ export default function Profile() {
             
             {cars.length > 0 && (
               <div className="mt-6 text-center">
-                <Link href="/usedcars/sell" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <Link href="/sell" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                   Sell Another Car
                 </Link>
               </div>
@@ -226,7 +226,7 @@ export default function Profile() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               <p className="text-gray-600 mb-4">You haven&apos;t saved any favorite cars yet.</p>
-              <Link href="/usedcars/browse" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <Link href="/browse" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Browse Cars
               </Link>
             </div>

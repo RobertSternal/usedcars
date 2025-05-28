@@ -4,18 +4,24 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get the token from the cookies
-    const token = request.cookies.get('token')?.value;
+    // Get the token from the Authorization header or localStorage (via custom header)
+    const authHeader = request.headers.get('Authorization');
+    let token = authHeader ? authHeader.replace('Bearer ', '') : null;
+
+    // Fallback to custom header if no Authorization header
+    if (!token) {
+      token = request.headers.get('x-auth-token');
+    }
 
     if (!token) {
-      console.log('No authentication token found in cookies');
+      console.log('No authentication token found in headers');
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
     }
-    
-    console.log('Token found in cookies, verifying...');
+
+    console.log('Token found in headers, verifying...');
 
     // Verify the token
     const decoded = jwt.verify(

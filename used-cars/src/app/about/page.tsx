@@ -304,13 +304,13 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              href="/usedcars/browse"
+              href="/browse"
               className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>
             <Link 
-              href="/usedcars/sell"
+              href="/sell"
               className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Sell Your Car

@@ -70,7 +70,7 @@ export default function SignUp() {
       localStorage.setItem('user', JSON.stringify(data.user));
 
       // Redirect to home page
-      router.push('/usedcars/');
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -97,7 +97,7 @@ export default function SignUp() {
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               Or{' '}
-              <Link href="/usedcars/signin" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+              <Link href="/signin" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                 sign in to your existing account
               </Link>
             </p>
@@ -266,9 +266,9 @@ export default function SignUp() {
             
             <div className="pt-2 text-center text-xs text-gray-500">
               By creating an account, you agree to our{' '}
-              <Link href="/usedcars/terms" className="text-blue-600 hover:text-blue-500 transition-colors">Terms of Service</Link>
+              <Link href="/terms" className="text-blue-600 hover:text-blue-500 transition-colors">Terms of Service</Link>
               {' '}and{' '}
-              <Link href="/usedcars/privacy" className="text-blue-600 hover:text-blue-500 transition-colors">Privacy Policy</Link>
+              <Link href="/privacy" className="text-blue-600 hover:text-blue-500 transition-colors">Privacy Policy</Link>
             </div>
           </form>
         </div>

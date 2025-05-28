@@ -96,7 +96,7 @@ export default function Home() {
             {popularBrands.map((brand) => (
               <Link 
                 key={brand.name}
-                href={`/usedcars/browse?brand=${brand.name.toLowerCase()}`}
+                href={`/browse?brand=${brand.name.toLowerCase()}`}
                 className="flex flex-col items-center group"
               >
                 <div className="bg-white p-6 rounded-full shadow-md mb-3 group-hover:shadow-lg transition-shadow duration-300">
@@ -122,7 +122,7 @@ export default function Home() {
           <div className="flex justify-between items-center mb-12">
             <h2 className="text-3xl font-bold text-white">Popular Cars</h2>
             <Link 
-              href="/usedcars/browse"
+              href="/browse"
               className="text-white hover:text-gray-200 font-medium flex items-center"
             >
               View All
@@ -255,13 +255,13 @@ export default function Home() {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Join thousands of satisfied customers who found their dream cars on UsedCars.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              href="/usedcars/browse"
+              href="/browse"
               className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Browse Cars
             </Link>
             <Link 
-              href="/usedcars/sell"
+              href="/sell"
               className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-4 rounded-md font-medium text-lg transition"
             >
               Sell Your Car

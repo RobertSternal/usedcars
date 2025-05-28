@@ -1,8 +1,9 @@
 'use client';
 
 // Image import removed as it's not being used
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function SellPage() {
   const router = useRouter();
@@ -23,6 +24,9 @@ export default function SellPage() {
     terms: false
   });
   const [images, setImages] = useState<File[]>([]);
+  const [imageErrors, setImageErrors] = useState<string>('');
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -45,8 +49,31 @@ export default function SellPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      setImageErrors('');
       const fileArray = Array.from(e.target.files);
+      
+      // Check number of images
+      if (fileArray.length > 10) {
+        setImageErrors('You can upload a maximum of 10 images');
+        return;
+      }
+      
+      // Check file sizes
+      const oversizedFiles = fileArray.filter(file => file.size > 5 * 1024 * 1024);
+      if (oversizedFiles.length > 0) {
+        setImageErrors('Some images exceed the 5MB size limit');
+        return;
+      }
+      
       setImages(fileArray);
+    }
+  };
+  
+  const clearImages = () => {
+    setImages([]);
+    setImageErrors('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -56,8 +83,19 @@ export default function SellPage() {
     setError('');
     
     try {
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('You must be logged in to create a listing');
+      }
+      
       // First, get the current user's information
-      const userResponse = await fetch('/api/auth/me');
+      const userResponse = await fetch('/usedcars/api/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!userResponse.ok) {
         const errorData = await userResponse.json();
@@ -68,11 +106,44 @@ export default function SellPage() {
       const userData = await userResponse.json();
       console.log('User data retrieved:', userData);
       
-      // In a real application, you would upload images to a storage service
-      // and get back URLs to store in the database
-      const mockImageUrls = images.map((_, index) => 
-        `https://example.com/car-image-${index}.jpg`
-      );
+      // Upload images to Cloudinary
+      let imageUrls: string[] = [];
+      
+      if (images.length > 0) {
+        setUploadProgress(10);
+        
+        // Convert images to base64
+        const imagePromises = images.map(image => {
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = error => reject(error);
+          });
+        });
+        
+        setUploadProgress(30);
+        const base64Images = await Promise.all(imagePromises);
+        
+        // Upload to Cloudinary
+        setUploadProgress(50);
+        const uploadResponse = await fetch('/usedcars/api/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ images: base64Images }),
+        });
+        
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload images');
+        }
+        
+        setUploadProgress(80);
+        const uploadResult = await uploadResponse.json();
+        imageUrls = uploadResult.urls;
+      }
       
       // Prepare data for API
       const carData = {
@@ -89,7 +160,7 @@ export default function SellPage() {
         location: formData.location,
         // Use the current user's ID from the authentication system
         sellerId: userData.id,
-        images: mockImageUrls,
+        images: imageUrls,
         // Additional fields that would be collected in a more detailed form
         color: 'Not specified',
         condition: 'USED',
@@ -101,10 +172,11 @@ export default function SellPage() {
         sellerNotes: ''
       };
       
-      const response = await fetch('/api/cars', {
+      const response = await fetch('/usedcars/api/cars', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(carData),
       });
@@ -448,14 +520,60 @@ export default function SellPage() {
                       className="hidden" 
                       multiple 
                       accept="image/*" 
-                      onChange={handleImageChange} 
+                      onChange={handleImageChange}
+                      ref={fileInputRef}
                     />
                     <label htmlFor="car-images" className="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer">
                       Select Files
                     </label>
+                    
+                    {imageErrors && (
+                      <div className="mt-2">
+                        <p className="text-sm text-red-600">{imageErrors}</p>
+                      </div>
+                    )}
+                    
                     {images.length > 0 && (
                       <div className="mt-4">
+                        <div className="flex flex-wrap gap-2 justify-center mb-3">
+                          {images.map((image, index) => (
+                            <div key={index} className={`relative w-20 h-20 ${index === 0 ? 'ring-2 ring-blue-500' : ''}`}>
+                              <Image 
+                                src={URL.createObjectURL(image)} 
+                                alt={`Preview ${index + 1}`} 
+                                className="w-full h-full object-cover rounded"
+                                width={80}
+                                height={80}
+                              />
+                              {index === 0 && (
+                                <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                  1
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                         <p className="text-sm text-green-600">{images.length} file(s) selected</p>
+                        <p className="text-xs text-gray-600 mt-1">First image will be the primary image</p>
+                        <button 
+                          type="button" 
+                          onClick={clearImages}
+                          className="mt-2 text-sm text-red-600 hover:text-red-800"
+                        >
+                          Clear selection
+                        </button>
+                      </div>
+                    )}
+                    
+                    {uploadProgress > 0 && uploadProgress < 100 && (
+                      <div className="mt-4">
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                          <div 
+                            className="bg-blue-600 h-2.5 rounded-full" 
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">Uploading images...</p>
                       </div>
                     )}
                   </div>
