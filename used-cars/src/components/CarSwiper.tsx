@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { recordLike, recordDislike } from '@/utils/carRecommendationEngine';
+import type { Car as PrismaCar } from '@prisma/client';
 
 interface Car {
   id: string;
@@ -33,6 +35,29 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
     setDirection('right');
     setLiked([...liked, currentCar.id]);
     
+    // Record user preference
+    recordLike({
+      id: currentCar.id,
+      brand: currentCar.brand,
+      model: currentCar.model,
+      bodyType: 'UNKNOWN',
+      transmission: 'UNKNOWN',
+      fuelType: 'UNKNOWN',
+      price: currentCar.price,
+      year: currentCar.year,
+      // Add other required fields with default values
+      title: currentCar.title,
+      mileage: currentCar.mileage,
+      color: '',
+      description: currentCar.description || '',
+      location: currentCar.location,
+      condition: 'UNKNOWN',
+      status: 'ACTIVE',
+      sellerId: '',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as any, currentCar.features || []);
+    
     setTimeout(() => {
       setDirection(null);
       if (currentIndex < cars.length - 1) {
@@ -44,12 +69,66 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
   const handleDislike = () => {
     setDirection('left');
     
+    // Record user preference
+    recordDislike({
+      id: currentCar.id,
+      brand: currentCar.brand,
+      model: currentCar.model,
+      bodyType: 'UNKNOWN',
+      transmission: 'UNKNOWN',
+      fuelType: 'UNKNOWN',
+      price: currentCar.price,
+      year: currentCar.year,
+      // Add other required fields with default values
+      title: currentCar.title,
+      mileage: currentCar.mileage,
+      color: '',
+      description: currentCar.description || '',
+      location: currentCar.location,
+      condition: 'UNKNOWN',
+      status: 'ACTIVE',
+      sellerId: '',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as any, currentCar.features || []);
+    
     setTimeout(() => {
       setDirection(null);
       if (currentIndex < cars.length - 1) {
         setCurrentIndex(currentIndex + 1);
       }
     }, 500);
+  };
+  
+  // State for loading more cars
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
+  
+  // Function to load more cars based on preferences
+  const loadMoreCars = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    setLoadMoreClicked(true);
+    
+    try {
+      // In a real implementation, this would make an API call to fetch more cars
+      // based on the user's preferences that were recorded during swiping
+      const response = await fetch('/api/cars/recommended?skip=' + cars.length);
+      
+      if (response.ok) {
+        const newCars = await response.json();
+        // We would update the cars array here with the new cars
+        // For now, we'll just reset to the beginning to simulate new cars
+        setCurrentIndex(0);
+      } else {
+        console.error('Failed to load more cars');
+      }
+    } catch (error) {
+      console.error('Error loading more cars:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   if (cars.length === 0 || currentIndex >= cars.length) {
@@ -59,8 +138,21 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
         </svg>
         <h3 className="text-2xl font-bold text-gray-800 mb-2">No more cars to show</h3>
-        <p className="text-gray-600 text-center mb-6">You&apos;ve seen all available cars matching your preferences.</p>
+        <p className="text-gray-600 text-center mb-6">
+          {loadMoreClicked 
+            ? "You've seen all available cars matching your preferences." 
+            : "You've seen our initial selection. Load more cars based on your preferences!"}
+        </p>
         <div className="flex space-x-4">
+          {!loadMoreClicked && (
+            <button 
+              onClick={loadMoreCars}
+              disabled={isLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition disabled:opacity-50"
+            >
+              {isLoading ? 'Loading...' : 'Load More Cars'}
+            </button>
+          )}
           <button 
             onClick={() => {
               setCurrentIndex(0);

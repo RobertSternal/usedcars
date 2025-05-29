@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   description: 'Discover your perfect car match with our interactive Car Finder tool.',
 };
 
-async function getCarsInRandomOrder() {
+// Initial number of cars to display
+const INITIAL_CARS_COUNT = 5;
+
+async function getCarsWithRecommendation() {
   try {
     // Fetch cars from the database with their images
     const cars = await prisma.car.findMany({
@@ -16,15 +19,59 @@ async function getCarsInRandomOrder() {
       },
       where: {
         status: 'ACTIVE'
-      }
+      },
+      // Limit the initial number of cars to fetch
+      take: INITIAL_CARS_COUNT
     });
     
-    // Shuffle the cars array for random order
-    const shuffledCars = [...cars].sort(() => Math.random() - 0.5);
+    // Process cars to include features in the expected format
+    const processedCars = cars.map(car => {
+      // Parse features if they are stored as a JSON string
+      let parsedFeatures: string[] = [];
+      if (car.features) {
+        try {
+          parsedFeatures = JSON.parse(car.features as string);
+        } catch {
+          if (typeof car.features === 'string') {
+            parsedFeatures = car.features.includes(',') ? 
+              car.features.split(',').map((f: string) => f.trim()) : 
+              [car.features];
+          }
+        }
+      }
+      
+      return {
+        ...car,
+        features: parsedFeatures
+      };
+    });
     
-    return shuffledCars.map(car => {
+    // Shuffle the cars array for random order on the server side
+    // The client-side component will handle the recommendation filtering
+    const shuffledCars = [...processedCars].sort(() => Math.random() - 0.5);
+    
+    // Define a proper type for the car object
+    interface ProcessedCar {
+      id: string;
+      title: string;
+      brand: string;
+      model: string;
+      year: number;
+      price: number;
+      mileage: number;
+      location: string;
+      description?: string;
+      features: string[];
+      images: Array<{
+        url: string;
+        isPrimary: boolean;
+        id?: string;
+      }>;
+    }
+    
+    return shuffledCars.map((car: ProcessedCar) => {
       // Find primary image or use the first one available
-      const primaryImage = car.images.find(img => img.isPrimary);
+      const primaryImage = car.images.find((img: {url: string; isPrimary: boolean}) => img.isPrimary);
       const imageUrl = primaryImage?.url || 
                        car.images[0]?.url || 
                        '/usedcars/images/auction-photos/car-placeholder.jpg';
@@ -37,7 +84,7 @@ async function getCarsInRandomOrder() {
         } catch {
           // If parsing fails, split by commas or use as is
           features = car.features.includes(',') ? 
-            car.features.split(',').map(f => f.trim()) : 
+            car.features.split(',').map((f: string) => f.trim()) : 
             [car.features];
         }
       }
@@ -63,7 +110,7 @@ async function getCarsInRandomOrder() {
 }
 
 export default async function DiscoverPage() {
-  const cars = await getCarsInRandomOrder();
+  const cars = await getCarsWithRecommendation();
   
   return (
     <div className="bg-gray-50 min-h-screen py-16">
