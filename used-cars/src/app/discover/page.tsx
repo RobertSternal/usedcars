@@ -1,94 +1,70 @@
 import type { Metadata } from 'next/types';
 import CarSwiper from '@/components/CarSwiper';
+import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Car Finder | UsedCars',
   description: 'Discover your perfect car match with our interactive Car Finder tool.',
 };
 
-// Sample car data with extended information for the swiper
-const cars = [
-  {
-    id: "1",
-    title: "BMW 3 Series 320d M Sport",
-    brand: "BMW",
-    model: "3 Series",
-    year: 2022,
-    price: 249000,
-    mileage: 15000,
-    location: "Warszawa",
-    imageUrl: "/usedcars/images/auction-photos/bmw2022.jpg",
-    description: "This stunning BMW 3 Series combines luxury, performance, and efficiency. The M Sport package adds a sporty touch to this executive sedan.",
-    features: ["Leather Interior", "Navigation System", "LED Headlights", "Parking Sensors", "Bluetooth", "Climate Control"],
-  },
-  {
-    id: "2",
-    title: "Audi A4 2.0 TDI Quattro",
-    brand: "Audi",
-    model: "A4",
-    year: 2021,
-    price: 219000,
-    mileage: 25000,
-    location: "Kraków",
-    imageUrl: "/usedcars/images/auction-photos/audia4.jpg",
-    description: "This Audi A4 Quattro offers exceptional handling with its all-wheel drive system and refined interior comfort for a premium driving experience.",
-    features: ["All-Wheel Drive", "Virtual Cockpit", "Bang & Olufsen Sound", "Heated Seats", "Parking Camera", "Lane Assist"],
-  },
-  {
-    id: "3",
-    title: "Mercedes-Benz C-Class C200",
-    brand: "Mercedes-Benz",
-    model: "C-Class",
-    year: 2023,
-    price: 289000,
-    mileage: 5000,
-    location: "Poznań",
-    imageUrl: "/usedcars/images/auction-photos/cclass.jpg",
-    description: "Nearly new Mercedes-Benz C-Class with premium features and elegant design. Experience luxury and cutting-edge technology.",
-    features: ["MBUX Infotainment", "Ambient Lighting", "Wireless Charging", "Keyless Entry", "Leather Seats", "Panoramic Roof"],
-  },
-  {
-    id: "4",
-    title: "Volkswagen Golf 8 GTI",
-    brand: "Volkswagen",
-    model: "Golf",
-    year: 2022,
-    price: 179000,
-    mileage: 18000,
-    location: "Wrocław",
-    imageUrl: "/usedcars/images/auction-photos/gti2022.jpg",
-    description: "The iconic Golf GTI in its latest generation. Combines everyday practicality with exhilarating performance and modern technology.",
-    features: ["Digital Cockpit", "Sport Suspension", "LED Matrix Headlights", "Tartan Seats", "Apple CarPlay", "Android Auto"],
-  },
-  {
-    id: "5",
-    title: "Toyota RAV4 Hybrid",
-    brand: "Toyota",
-    model: "RAV4",
-    year: 2023,
-    price: 199000,
-    mileage: 10000,
-    location: "Gdańsk",
-    imageUrl: "/usedcars/images/auction-photos/rav4.jpg",
-    description: "Efficient and eco-friendly Toyota RAV4 Hybrid SUV. Perfect balance of performance, space, and fuel economy for family adventures.",
-    features: ["Hybrid Powertrain", "Toyota Safety Sense", "AWD System", "JBL Sound System", "Heated Seats", "Power Tailgate"],
-  },
-  {
-    id: "6",
-    title: "Mazda CX-5 Skyactiv-G",
-    brand: "Mazda",
-    model: "CX-5",
-    year: 2022,
-    price: 169000,
-    mileage: 20000,
-    location: "Łódź",
-    imageUrl: "/usedcars/images/auction-photos/cx5.jpg",
-    description: "Elegant and dynamic Mazda CX-5 with premium feel. Known for its responsive handling and beautiful design inside and out.",
-    features: ["Bose Sound System", "Head-Up Display", "Leather Interior", "Blind Spot Monitoring", "Sunroof", "Heated Steering Wheel"],
-  },
-];
+async function getCarsInRandomOrder() {
+  try {
+    // Fetch cars from the database with their images
+    const cars = await prisma.car.findMany({
+      include: {
+        images: true
+      },
+      where: {
+        status: 'ACTIVE'
+      }
+    });
+    
+    // Shuffle the cars array for random order
+    const shuffledCars = [...cars].sort(() => Math.random() - 0.5);
+    
+    return shuffledCars.map(car => {
+      // Find primary image or use the first one available
+      const primaryImage = car.images.find(img => img.isPrimary);
+      const imageUrl = primaryImage?.url || 
+                       car.images[0]?.url || 
+                       '/usedcars/images/auction-photos/car-placeholder.jpg';
+      
+      // Parse features if they are stored as a JSON string
+      let features: string[] = [];
+      if (car.features) {
+        try {
+          features = JSON.parse(car.features);
+        } catch {
+          // If parsing fails, split by commas or use as is
+          features = car.features.includes(',') ? 
+            car.features.split(',').map(f => f.trim()) : 
+            [car.features];
+        }
+      }
+      
+      return {
+        id: car.id,
+        title: car.title,
+        brand: car.brand,
+        model: car.model,
+        year: car.year,
+        price: car.price,
+        mileage: car.mileage,
+        location: car.location,
+        imageUrl: imageUrl,
+        description: car.description,
+        features: features
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching cars:', error);
+    return [];
+  }
+}
 
-export default function DiscoverPage() {
+export default async function DiscoverPage() {
+  const cars = await getCarsInRandomOrder();
+  
   return (
     <div className="bg-gray-50 min-h-screen py-16">
       <div className="container mx-auto px-4">

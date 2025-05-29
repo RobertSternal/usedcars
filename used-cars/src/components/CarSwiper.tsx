@@ -170,14 +170,6 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
           </svg>
         </button>
       </div>
-      
-      <div className="absolute top-4 left-0 right-0 flex justify-center">
-        <div className="bg-white px-4 py-2 rounded-full shadow-md">
-          <span className="font-medium text-gray-800">
-            {currentIndex + 1} of {cars.length}
-          </span>
-        </div>
-      </div>
     </div>
   );
 }
