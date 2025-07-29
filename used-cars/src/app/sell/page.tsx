@@ -87,8 +87,11 @@ export default function SellPage() {
       const token = localStorage.getItem('token');
       
       if (!token) {
+        console.error('No token found in localStorage');
         throw new Error('You must be logged in to create a listing');
       }
+      
+      console.log('Token found in localStorage, proceeding with authentication check');
       
       // First, get the current user's information
       const userResponse = await fetch('/usedcars/api/auth/me', {

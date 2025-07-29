@@ -104,7 +104,7 @@ export async function POST(request: Request) {
     
     console.log('Authentication successful');
     
-    // Create response with user data
+    // Create response with user data and token
     const response = NextResponse.json({
       user: {
         id: user.id,
@@ -112,6 +112,7 @@ export async function POST(request: Request) {
         name: user.name,
         role: user.role,
       },
+      token: token, // Include token in the response body
       success: true
     });
     

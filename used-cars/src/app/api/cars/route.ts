@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,6 +46,57 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Get the token from the Authorization header, custom header, or cookies
+    const authHeader = request.headers.get('Authorization');
+    let token = authHeader ? authHeader.replace('Bearer ', '') : null;
+
+    // Fallback to custom header if no Authorization header
+    if (!token) {
+      token = request.headers.get('x-auth-token');
+    }
+    
+    // Fallback to cookies if no token in headers
+    if (!token) {
+      const cookieHeader = request.headers.get('cookie');
+      if (cookieHeader) {
+        const cookies = cookieHeader.split(';').map(cookie => cookie.trim());
+        const tokenCookie = cookies.find(cookie => cookie.startsWith('token='));
+        if (tokenCookie) {
+          token = tokenCookie.split('=')[1];
+          console.log('Token found in cookies');
+        }
+      }
+    }
+
+    if (!token) {
+      console.log('No authentication token found in headers or cookies');
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+    
+    console.log('Token found, proceeding with verification');
+
+    // Verify the token
+    let userId;
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || 'fallback_secret'
+      ) as { userId: string, email: string, role: string };
+      
+      userId = decoded.userId;
+      // If token verification fails, it will throw an error and go to the catch block
+      console.log('User authenticated:', decoded);
+    } catch (authError) {
+      console.error('Token verification failed:', authError);
+      return NextResponse.json(
+        { error: 'Authentication failed', details: authError instanceof Error ? authError.message : 'Unknown error' },
+        { status: 401 }
+      );
+    }
+    
     const body = await request.json();
     
     const {
@@ -67,9 +119,12 @@ export async function POST(request: NextRequest) {
       seats,
       features,
       sellerNotes,
-      sellerId,
       images,
     } = body;
+    
+    // Use the userId from the verified token instead of relying on the request body
+    // This ensures that users can only create listings as themselves
+    const sellerId = userId;
 
     // Create car
     const car = await prisma.car.create({
