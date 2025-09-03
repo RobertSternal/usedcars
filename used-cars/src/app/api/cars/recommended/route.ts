@@ -59,8 +59,12 @@ export async function GET(request: NextRequest) {
         price: car.price,
         mileage: car.mileage,
         location: car.location,
+        fuelType: car.fuelType,
+        transmission: car.transmission,
+        bodyType: car.bodyType,
+        power: car.power,
         imageUrl: imageUrl,
-        description: car.description,
+        description: car.description || '',
         features: parsedFeatures
       };
     });

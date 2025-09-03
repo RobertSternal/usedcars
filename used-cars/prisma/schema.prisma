@@ -26,6 +26,7 @@ model User {
   receivedReviews   Review[]   @relation("UserReviewed")
   messages          Message[]         // Messages sent by this user
   receivedMessages  Message[]  @relation("MessageRecipient")
+  preferences       UserPreferences?  // User's car preferences
 }
 
 // Car model
@@ -111,4 +112,37 @@ model Message {
   sender            User      @relation(fields: [senderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   recipientId       String
   recipient         User      @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model UserPreferences {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Budget preferences
+  minPrice          Float?
+  maxPrice          Float?
+  
+  // Brand preferences
+  preferredBrands   String?   @db.Text  // JSON array of preferred brands
+  dislikedBrands    String?   @db.Text  // JSON array of disliked brands
+  
+  // Car type preferences
+  preferredBodyTypes String?  @db.Text  // JSON array of body types
+  preferredFuelTypes String?  @db.Text  // JSON array of fuel types
+  preferredTransmission String? // MANUAL, AUTOMATIC, SEMI_AUTOMATIC, ANY
+  
+  // Technical preferences
+  minYear           Int?
+  maxYear           Int?
+  maxMileage        Int?
+  minPower          Int?
+  maxPower          Int?
+  
+  // Location preferences
+  preferredLocations String? @db.Text   // JSON array of preferred cities/regions
+  maxDistanceKm     Int?                // Maximum distance from user's location
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
