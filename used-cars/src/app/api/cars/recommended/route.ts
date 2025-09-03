@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 
 // Number of cars to fetch per request
@@ -11,21 +12,74 @@ export async function GET(request: NextRequest) {
     const skipParam = searchParams.get('skip');
     const skip = skipParam ? parseInt(skipParam) : 0;
     
-    // Fetch next batch of cars
+    // Get user preferences if authenticated
+    let userPreferences = null;
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as { userId: string };
+        if (decoded) {
+          userPreferences = await prisma.userPreferences.findUnique({
+            where: { userId: decoded.userId }
+          });
+        }
+      } catch {
+        console.log('Token verification failed, proceeding without preferences');
+      }
+    }
+
+    // Build where clause - start with basic filter
+    const whereClause: { status: string; OR?: any[]; AND?: any[] } = {
+      status: 'ACTIVE'
+    };
+
+    // Apply preferences-based prioritization (not hard filtering)
+    let orderBy: any[] = [{ createdAt: 'desc' }];
+    
+    if (userPreferences) {
+      const preferredConditions: any[] = [];
+      const excludeConditions: any[] = [];
+
+      // Brand preferences - prioritize preferred brands
+      if (userPreferences.preferredBrands) {
+        const preferredBrands = JSON.parse(userPreferences.preferredBrands);
+        if (preferredBrands.length > 0) {
+          preferredConditions.push({ brand: { in: preferredBrands } });
+        }
+      }
+
+      // Year preferences - prioritize cars in preferred year range
+      if (userPreferences.minYear || userPreferences.maxYear) {
+        const yearCondition: any = {};
+        if (userPreferences.minYear) yearCondition.gte = userPreferences.minYear;
+        if (userPreferences.maxYear) yearCondition.lte = userPreferences.maxYear;
+        preferredConditions.push({ year: yearCondition });
+      }
+
+      // Only exclude disliked brands (hard filter)
+      if (userPreferences.dislikedBrands) {
+        const dislikedBrands = JSON.parse(userPreferences.dislikedBrands);
+        if (dislikedBrands.length > 0) {
+          excludeConditions.push({ brand: { notIn: dislikedBrands } });
+        }
+      }
+
+      // Apply exclusions as hard filters
+      if (excludeConditions.length > 0) {
+        whereClause.AND = excludeConditions;
+      }
+    }
+    
+    // Fetch cars
     const cars = await prisma.car.findMany({
       include: {
         images: true
       },
-      where: {
-        status: 'ACTIVE'
-      },
+      where: whereClause,
       skip: skip,
       take: CARS_PER_PAGE,
-      orderBy: {
-        // We're using random ordering here, but in a real implementation
-        // this would be based on user preferences stored in the database
-        createdAt: 'desc'
-      }
+      orderBy: orderBy
     });
     
     // Process cars to include features in the expected format
