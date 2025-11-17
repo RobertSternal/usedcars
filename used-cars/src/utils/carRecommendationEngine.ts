@@ -115,7 +115,7 @@ export function saveUserPreferences(preferences: UserPreference): void {
 /**
  * Record a user's like for a car
  */
-export function recordLike(car: Car, features: string[]): void {
+export function recordLike(car: Car): void {
   if (!isClient) return;
   
   try {
@@ -138,7 +138,7 @@ export function recordLike(car: Car, features: string[]): void {
 /**
  * Record a user's dislike for a car and update feature preferences
  */
-export function recordDislike(car: Car, features: string[]): void {
+export function recordDislike(car: Car, _features?: string[]): void {
   if (!isClient) return;
   
   try {
@@ -150,7 +150,7 @@ export function recordDislike(car: Car, features: string[]): void {
     }
     
     // Update disliked features
-    features.forEach(feature => {
+    (_features ?? []).forEach(feature => {
       preferences.dislikedFeatures[feature] = (preferences.dislikedFeatures[feature] || 0) + 1;
     });
     

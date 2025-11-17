@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import CarSwiper from '@/components/CarSwiper';
 import Link from 'next/link';
 
@@ -46,26 +45,25 @@ export default function DiscoverPage() {
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
-    checkAuthAndLoadData();
+    const checkAuthAndLoadData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsLoggedIn(false);
+        await loadCarsWithoutPreferences();
+        return;
+      }
+
+      setIsLoggedIn(true);
+      await Promise.all([
+        loadUserPreferences(token),
+        loadCars(token)
+      ]);
+    };
+
+    void checkAuthAndLoadData();
   }, []);
-
-  const checkAuthAndLoadData = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setIsLoggedIn(false);
-      await loadCarsWithoutPreferences();
-      return;
-    }
-
-    setIsLoggedIn(true);
-    await Promise.all([
-      loadUserPreferences(token),
-      loadCars(token)
-    ]);
-  };
 
   const loadUserPreferences = async (token: string) => {
     try {

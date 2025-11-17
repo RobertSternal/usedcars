@@ -56,7 +56,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
       sellerId: '',
       createdAt: new Date(),
       updatedAt: new Date()
-    } as any, currentCar.features || []);
+    } as PrismaCar);
     
     setTimeout(() => {
       setDirection(null);
@@ -90,7 +90,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
       sellerId: '',
       createdAt: new Date(),
       updatedAt: new Date()
-    } as any, currentCar.features || []);
+    } as PrismaCar);
     
     setTimeout(() => {
       setDirection(null);
@@ -117,7 +117,7 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
       const response = await fetch('/api/cars/recommended?skip=' + cars.length);
       
       if (response.ok) {
-        const newCars = await response.json();
+        await response.json();
         // We would update the cars array here with the new cars
         // For now, we'll just reset to the beginning to simulate new cars
         setCurrentIndex(0);

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 
 // Number of cars to fetch per request
 const CARS_PER_PAGE = 5;
@@ -30,36 +31,19 @@ export async function GET(request: NextRequest) {
     }
 
     // Build where clause - start with basic filter
-    const whereClause: { status: string; OR?: any[]; AND?: any[] } = {
+    const whereClause: Prisma.CarWhereInput = {
       status: 'ACTIVE'
     };
 
-    // Apply preferences-based prioritization (not hard filtering)
-    let orderBy: any[] = [{ createdAt: 'desc' }];
+    // Apply preferences-based filtering
+    const orderBy: Prisma.CarOrderByWithRelationInput[] = [{ createdAt: 'desc' }];
     
     if (userPreferences) {
-      const preferredConditions: any[] = [];
-      const excludeConditions: any[] = [];
-
-      // Brand preferences - prioritize preferred brands
-      if (userPreferences.preferredBrands) {
-        const preferredBrands = JSON.parse(userPreferences.preferredBrands);
-        if (preferredBrands.length > 0) {
-          preferredConditions.push({ brand: { in: preferredBrands } });
-        }
-      }
-
-      // Year preferences - prioritize cars in preferred year range
-      if (userPreferences.minYear || userPreferences.maxYear) {
-        const yearCondition: any = {};
-        if (userPreferences.minYear) yearCondition.gte = userPreferences.minYear;
-        if (userPreferences.maxYear) yearCondition.lte = userPreferences.maxYear;
-        preferredConditions.push({ year: yearCondition });
-      }
+      const excludeConditions: Prisma.CarWhereInput[] = [];
 
       // Only exclude disliked brands (hard filter)
       if (userPreferences.dislikedBrands) {
-        const dislikedBrands = JSON.parse(userPreferences.dislikedBrands);
+        const dislikedBrands: string[] = JSON.parse(userPreferences.dislikedBrands);
         if (dislikedBrands.length > 0) {
           excludeConditions.push({ brand: { notIn: dislikedBrands } });
         }
