@@ -31,7 +31,7 @@ export default function HeroSection() {
               <input
                 type="text"
                 placeholder="Search by make, model, or keyword"
-                className="flex-grow px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                className="flex-grow px-4 py-3 rounded-md border border-white/60 bg-black/40 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-md font-medium transition">
                 Search Cars
