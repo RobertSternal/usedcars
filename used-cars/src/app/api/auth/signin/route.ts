@@ -61,8 +61,21 @@ export async function POST(request: Request) {
     // Check if user exists
     if (!user) {
       return NextResponse.json(
-        { error: 'Invalid credentials' },
+        { error: 'Nieprawidłowe dane logowania' },
         { status: 401 }
+      );
+    }
+    
+    // Check if user is verified
+    if (!user.verified) {
+      return NextResponse.json(
+        { 
+          error: 'Konto nie zostało zweryfikowane. Sprawdź swoją skrzynkę email i wprowadź kod weryfikacyjny.',
+          requiresVerification: true,
+          userId: user.id,
+          email: user.email,
+        },
+        { status: 403 }
       );
     }
     

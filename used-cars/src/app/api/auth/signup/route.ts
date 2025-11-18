@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { sendVerificationEmail } from '@/lib/email';
+import { createVerificationCode } from '@/lib/verification';
 
 // Initialize Prisma client
 let prisma: PrismaClient;
@@ -40,7 +41,24 @@ export async function POST(request: NextRequest) {
     // Validate input
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: 'Email i hasło są wymagane' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Nieprawidłowy format adresu email' },
+        { status: 400 }
+      );
+    }
+
+    // Validate password strength (at least 6 characters)
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: 'Hasło musi mieć co najmniej 6 znaków' },
         { status: 400 }
       );
     }
@@ -55,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { error: 'Użytkownik z tym adresem email już istnieje' },
         { status: 400 }
       );
     }
@@ -63,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Create the user
+    // Create the user as UNVERIFIED
     const user = await client.user.create({
       data: {
         email,
@@ -72,6 +90,7 @@ export async function POST(request: NextRequest) {
         phone,
         profileImage,
         role,
+        verified: false, // User is not verified yet
       },
       select: {
         id: true,
@@ -80,29 +99,40 @@ export async function POST(request: NextRequest) {
         phone: true,
         profileImage: true,
         role: true,
+        verified: true,
         createdAt: true,
       },
     });
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { 
-        userId: user.id,
-        email: user.email,
-        role: user.role 
-      },
-      process.env.JWT_SECRET || 'fallback_secret',
-      { expiresIn: '1d' }
-    );
+    // Generate verification code
+    const verificationCode = await createVerificationCode(client, user.id);
+
+    // Send verification email
+    const emailSent = await sendVerificationEmail(email, verificationCode, name);
+
+    if (!emailSent) {
+      console.error('Failed to send verification email');
+      // Don't fail the registration, but log the error
+    }
 
     return NextResponse.json({
-      user,
-      token
+      success: true,
+      message: 'Konto zostało utworzone. Sprawdź swoją skrzynkę email, aby zweryfikować konto.',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        verified: user.verified,
+      },
+      requiresVerification: true,
     }, { status: 201 });
   } catch (error) {
     console.error('Error creating user:', error);
     return NextResponse.json(
-      { error: 'Failed to create user', details: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        error: 'Nie udało się utworzyć konta', 
+        details: error instanceof Error ? error.message : 'Nieznany błąd' 
+      },
       { status: 500 }
     );
   } finally {

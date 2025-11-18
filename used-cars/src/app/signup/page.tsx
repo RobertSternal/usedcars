@@ -65,12 +65,15 @@ export default function SignUp() {
         throw new Error(data.error || 'Failed to create account');
       }
 
-      // Store token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // Store user info temporarily for verification
+      localStorage.setItem('pendingVerification', JSON.stringify({
+        userId: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+      }));
 
-      // Redirect to home page
-      router.push('/');
+      // Redirect to verification page
+      router.push('/verify');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

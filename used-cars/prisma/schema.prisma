@@ -8,22 +8,25 @@ datasource db {
 }
 
 model User {
-  id               String           @id @default(cuid())
-  email            String           @unique
-  password         String
-  name             String?
-  phone            String?
-  profileImage     String?
-  role             String           @default("USER")
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  cars             Car[]
-  favorites        Favorite[]
-  receivedMessages Message[]        @relation("MessageRecipient")
-  messages         Message[]
-  reviews          Review[]
-  receivedReviews  Review[]         @relation("UserReviewed")
-  preferences      UserPreferences?
+  id                 String              @id @default(cuid())
+  email              String              @unique
+  password           String
+  name               String?
+  phone              String?
+  profileImage       String?
+  role               String              @default("USER")
+  verified           Boolean             @default(false)
+  emailVerified      DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  cars               Car[]
+  favorites          Favorite[]
+  receivedMessages   Message[]           @relation("MessageRecipient")
+  messages           Message[]
+  reviews            Review[]
+  receivedReviews    Review[]            @relation("UserReviewed")
+  preferences        UserPreferences?
+  verificationCodes  VerificationCode[]
 }
 
 model Car {
@@ -122,4 +125,18 @@ model UserPreferences {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationCode {
+  id         String   @id @default(cuid())
+  code       String
+  userId     String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
 }
