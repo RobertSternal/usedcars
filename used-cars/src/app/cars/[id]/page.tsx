@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'View detailed information about this vehicle.',
 };
 
+import ImageGallery from '@/components/ImageGallery';
+
 // Define the car data type
 interface CarImage {
   id: string;
@@ -155,10 +157,6 @@ export default async function CarDetailPage(props: any) {
   // Default image if no images are available
   const defaultImage = '/cars/default-car.jpg';
   
-  // Get the primary image or the first image or default
-  const primaryImage = car.images.length > 0 
-    ? (car.images.find(img => img.isPrimary)?.url || car.images[0].url) 
-    : defaultImage;
   
   return (
     <div className="bg-gray-50 py-10">
@@ -195,46 +193,11 @@ export default async function CarDetailPage(props: any) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Images and Details */}
           <div className="lg:col-span-2">
-            {/* Main Image */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-              <div className="relative h-[400px] w-full">
-                <Image
-                  src={primaryImage}
-                  alt={car.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
-            
-            {/* Thumbnail Images */}
-            <div className="grid grid-cols-5 gap-3 mb-8">
-              {car.images.length > 0 ? (
-                car.images.map((image, index) => (
-                  <div 
-                    key={index} 
-                    className="relative h-20 bg-white rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500 transition"
-                  >
-                    <Image
-                      src={image.url}
-                      alt={`${car.title} - Image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))
-              ) : (
-                <div className="relative h-20 bg-white rounded-md overflow-hidden">
-                  <Image
-                    src={defaultImage}
-                    alt="No image available"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-            </div>
+            <ImageGallery 
+              images={car.images} 
+              title={car.title} 
+              defaultImage={defaultImage} 
+            />
             
             {/* Tabs */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
