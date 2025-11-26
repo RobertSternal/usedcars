@@ -53,7 +53,8 @@ export default function Profile() {
     const storedUser = localStorage.getItem('user');
     
     if (!token || !storedUser) {
-      router.push('/signin');
+      // Middleware already handles redirect, just wait
+      setLoading(false);
       return;
     }
 
@@ -67,7 +68,8 @@ export default function Profile() {
       console.error('Failed to parse user data:', error);
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      router.push('/signin');
+      // Middleware will handle redirect
+      setLoading(false);
     } finally {
       setLoading(false);
     }

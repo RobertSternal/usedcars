@@ -59,8 +59,14 @@ export default function SignIn() {
       // Dispatch custom event to notify other components about login state change
       window.dispatchEvent(new Event('loginStateChange'));
 
-      // Redirect to home page
-      router.push('/');
+      // Get redirect URL from query params, default to home page
+      const redirectUrl = searchParams.get('redirect') || '/';
+      
+      // Small delay to ensure cookie is set before redirect
+      setTimeout(() => {
+        router.push(redirectUrl);
+        router.refresh(); // Refresh to ensure auth state is updated in Server Components
+      }, 100);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

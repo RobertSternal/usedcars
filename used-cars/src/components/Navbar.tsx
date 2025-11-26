@@ -50,12 +50,24 @@ export default function Navbar() {
     };
   }, []);
 
-  const handleSignOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    setUserName('');
-    router.push('/');
+  const handleSignOut = async () => {
+    try {
+      // Call signout API to clear the cookie
+      await fetch('/usedcars/api/auth/signout', {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      // Clear local storage regardless of API call result
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setIsLoggedIn(false);
+      setUserName('');
+      // Use router to navigate to home page respecting basePath
+      router.push('/');
+      router.refresh();
+    }
   };
 
   const toggleMobileMenu = () => {

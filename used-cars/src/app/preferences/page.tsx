@@ -45,7 +45,8 @@ export default function PreferencesPage() {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          router.push('/signin');
+          // Middleware will handle redirect
+          setLoading(false);
           return;
         }
 
@@ -69,7 +70,8 @@ export default function PreferencesPage() {
       setSaving(true);
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/signin');
+        setMessage('Please sign in to save preferences');
+        setSaving(false);
         return;
       }
 

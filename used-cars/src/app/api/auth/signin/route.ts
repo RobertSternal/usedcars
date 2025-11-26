@@ -109,7 +109,8 @@ export async function POST(request: Request) {
       { 
         userId: user.id,
         email: user.email,
-        role: user.role 
+        role: user.role,
+        verified: user.verified 
       },
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '1d' }
@@ -130,15 +131,18 @@ export async function POST(request: Request) {
     });
     
     // Set the token as a cookie
+    // Using lax sameSite for better compatibility with redirects
     response.cookies.set({
       name: 'token',
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 86400, // 1 day in seconds
       path: '/'
     });
+    
+    console.log('✅ Cookie set successfully for user:', user.email);
     
     return response;
   } catch (error) {

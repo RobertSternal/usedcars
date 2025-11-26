@@ -1,41 +1,9 @@
-import jwt from 'jsonwebtoken';
 import { NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { verifyToken, getTokenFromRequest } from './jwt';
 
-interface TokenPayload {
-  userId: string;
-  email: string;
-  role: string;
-}
-
-// Verify JWT token
-export const verifyToken = (token: string): TokenPayload | null => {
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'fallback_secret'
-    ) as TokenPayload;
-    return decoded;
-  } catch (error) {
-    console.error('Token verification failed:', error);
-    return null;
-  }
-};
-
-// Get token from request (cookie or Authorization header)
-export const getTokenFromRequest = (request: NextRequest): string | null => {
-  // Try to get from cookie first
-  const cookieToken = request.cookies.get('token')?.value;
-  if (cookieToken) return cookieToken;
-
-  // Try to get from Authorization header
-  const authHeader = request.headers.get('authorization');
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.substring(7);
-  }
-
-  return null;
-};
+// Re-export from jwt.ts
+export { verifyToken, getTokenFromRequest };
 
 // Get authenticated user from request
 export const getAuthUser = async (request: NextRequest): Promise<{
@@ -45,10 +13,16 @@ export const getAuthUser = async (request: NextRequest): Promise<{
   verified: boolean;
 } | null> => {
   const token = getTokenFromRequest(request);
-  if (!token) return null;
+  if (!token) {
+    console.log('❌ No token found in request');
+    return null;
+  }
 
-  const payload = verifyToken(token);
-  if (!payload) return null;
+  const payload = await verifyToken(token);
+  if (!payload) {
+    console.log('❌ Token verification failed');
+    return null;
+  }
 
   // Verify user still exists and is verified
   const prisma = new PrismaClient();
@@ -63,7 +37,12 @@ export const getAuthUser = async (request: NextRequest): Promise<{
       },
     });
 
-    if (!user) return null;
+    if (!user) {
+      console.log('❌ User not found in database');
+      return null;
+    }
+
+    console.log('✅ User found in database:', user.email, 'verified:', user.verified);
 
     return {
       userId: user.id,
@@ -72,7 +51,7 @@ export const getAuthUser = async (request: NextRequest): Promise<{
       verified: user.verified,
     };
   } catch (error) {
-    console.error('Error fetching user:', error);
+    console.error('❌ Error fetching user:', error);
     return null;
   } finally {
     await prisma.$disconnect();
