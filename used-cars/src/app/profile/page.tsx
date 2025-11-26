@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatCurrency } from '@/lib/utils';
+import { getFavorites } from '@/app/actions/favorite';
 
 interface User {
   id: string;
@@ -36,15 +37,17 @@ interface Car {
   location: string;
   description: string;
   status: string;
-  createdAt: string;
+  createdAt: string | Date;
   images: CarImage[];
 }
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]); // Using any to avoid strict type mismatch with Prisma result
   const [loading, setLoading] = useState(true);
   const [loadingCars, setLoadingCars] = useState(true);
+  const [loadingFavorites, setLoadingFavorites] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -64,6 +67,9 @@ export default function Profile() {
       
       // Fetch user's car listings
       fetchUserCars(userData.id);
+      
+      // Fetch favorites
+      fetchFavorites();
     } catch (error) {
       console.error('Failed to parse user data:', error);
       localStorage.removeItem('token');
@@ -74,6 +80,18 @@ export default function Profile() {
       setLoading(false);
     }
   }, [router]);
+  
+  const fetchFavorites = async () => {
+    try {
+      setLoadingFavorites(true);
+      const favs = await getFavorites();
+      setFavorites(favs);
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    } finally {
+      setLoadingFavorites(false);
+    }
+  };
   
   const fetchUserCars = async (userId: string) => {
     try {
@@ -223,15 +241,69 @@ export default function Profile() {
           
           <div className="mt-10">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Favorite Cars</h2>
-            <div className="bg-gray-50 rounded-lg p-8 text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <p className="text-gray-600 mb-4">You haven&apos;t saved any favorite cars yet.</p>
-              <Link href="/browse" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Browse Cars
-              </Link>
-            </div>
+            
+            {loadingFavorites ? (
+              <div className="bg-gray-50 rounded-lg p-8 flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+              </div>
+            ) : favorites.length === 0 ? (
+              <div className="bg-gray-50 rounded-lg p-8 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <p className="text-gray-600 mb-4">You haven&apos;t saved any favorite cars yet.</p>
+                <Link href="/usedcars/browse" className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Browse Cars
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {favorites.map((car) => (
+                  <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    <div className="relative h-48 bg-gray-200">
+                      {car.images && car.images.length > 0 ? (
+                        <Image 
+                          src={car.images.find((img: any) => img.isPrimary)?.url || car.images[0].url} 
+                          alt={car.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 text-xs font-semibold rounded">
+                        {car.status}
+                      </div>
+                    </div>
+                    
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{car.title}</h3>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-blue-600 font-bold">{formatCurrency(car.price)}</span>
+                        <span className="text-gray-600 text-sm">{car.mileage.toLocaleString()} km</span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">{car.year}</span>
+                        <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded capitalize">{car.fuelType}</span>
+                        <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded capitalize">{car.transmission}</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center mt-4">
+                        <span className="text-gray-600 text-sm">{new Date(car.createdAt).toLocaleDateString()}</span>
+                        <Link href={`/cars/${car.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

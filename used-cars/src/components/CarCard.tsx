@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import FavoriteButton from './FavoriteButton';
 
 interface CarCardProps {
   id: string;
@@ -11,6 +12,7 @@ interface CarCardProps {
   mileage: number;
   location: string;
   imageUrl: string;
+  isFavorite?: boolean;
 }
 
 export default function CarCard({
@@ -23,6 +25,7 @@ export default function CarCard({
   mileage,
   location,
   imageUrl,
+  isFavorite = false,
 }: CarCardProps) {
   return (
     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-[1.025] transition-all duration-300 ease-in-out transform-gpu group">
@@ -68,14 +71,11 @@ export default function CarCard({
               <span>{location}</span>
             </div>
             
-            <button className="bg-gray-100 hover:bg-gray-200 p-1 rounded-full">
-              <svg className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
+            <FavoriteButton carId={id} initialIsFavorite={isFavorite} variant="icon" />
           </div>
         </div>
       </div>
     </div>
   );
 }
+

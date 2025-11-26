@@ -2,6 +2,7 @@ import type { Metadata } from 'next/types';
 import CarCard from '@/components/CarCard';
 import CarFilter from '@/components/CarFilter';
 import prisma from '@/lib/prisma';
+import { getCurrentUserId } from '@/app/actions/favorite';
 
 export const metadata: Metadata = {
   title: 'Browse Cars | UsedCars',
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 async function getCars() {
+  const userId = await getCurrentUserId();
+
   try {
     const cars = await prisma.car.findMany({
       include: {
@@ -22,6 +25,16 @@ async function getCars() {
       }
     });
     
+    // Get favorites for this user
+    let favoriteCarIds = new Set<string>();
+    if (userId) {
+      const favorites = await prisma.favorite.findMany({
+        where: { userId },
+        select: { carId: true }
+      });
+      favoriteCarIds = new Set(favorites.map(f => f.carId));
+    }
+    
     return cars.map(car => ({
       id: car.id,
       title: car.title,
@@ -31,7 +44,8 @@ async function getCars() {
       price: car.price,
       mileage: car.mileage,
       location: car.location,
-      imageUrl: car.images[0]?.url || '/usedcars/images/auction-photos/car-placeholder.jpg'
+      imageUrl: car.images[0]?.url || '/usedcars/images/auction-photos/car-placeholder.jpg',
+      isFavorite: favoriteCarIds.has(car.id)
     }));
   } catch (error) {
     console.error('Error fetching cars:', error);

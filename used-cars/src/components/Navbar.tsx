@@ -119,7 +119,7 @@ export default function Navbar() {
                   <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
                     Profile
                   </Link>
-                  <Link href="/sell" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
+                  <Link href="/my-listings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
                     My Listings
                   </Link>
                   <Link href="/favorites" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">

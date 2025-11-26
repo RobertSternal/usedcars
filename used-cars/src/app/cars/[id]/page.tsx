@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 import ImageGallery from '@/components/ImageGallery';
+import FavoriteButton from '@/components/FavoriteButton';
+import { checkIsFavorite } from '@/app/actions/favorite';
 
 // Define the car data type
 interface CarImage {
@@ -150,6 +152,8 @@ export default async function CarDetailPage(props: any) {
   if (!car.seller.rating) {
     car.seller.rating = 5.0;
   }
+  
+  const isFavorite = await checkIsFavorite(car.id);
   
   // Ensure car has a variant property or use model as fallback
   const variant = car.model;
@@ -415,12 +419,7 @@ export default async function CarDetailPage(props: any) {
                   </svg>
                   Share
                 </button>
-                <button className="flex items-center text-gray-600 hover:text-red-600">
-                  <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                  Save
-                </button>
+                <FavoriteButton carId={car.id} initialIsFavorite={isFavorite} />
                 <button className="flex items-center text-gray-600 hover:text-yellow-600">
                   <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
