@@ -174,90 +174,102 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
   }
   
   return (
-    <div className="relative h-[600px] w-full max-w-md mx-auto">
-      <div 
-        className={`absolute inset-0 bg-white rounded-xl shadow-xl overflow-hidden transition-transform duration-500 ${
-          direction === 'left' 
-            ? 'translate-x-[-150%] rotate-[-30deg]' 
-            : direction === 'right' 
-            ? 'translate-x-[150%] rotate-[30deg]' 
-            : ''
-        }`}
-      >
-        <div className="relative h-[300px] w-full">
-          <Image
-            src={currentCar.imageUrl}
-            alt={`${currentCar.year} ${currentCar.brand} ${currentCar.model}`}
-            fill
-            className="object-cover"
-          />
-          <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-lg font-bold">
-            {new Intl.NumberFormat('pl-PL', {
-              style: 'currency',
-              currency: 'PLN',
-              maximumFractionDigits: 0,
-            }).format(currentCar.price)}
-          </div>
-        </div>
-        
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {currentCar.title}
-          </h2>
-          
-          <div className="flex justify-between text-lg text-gray-600 mb-4">
-            <span>{currentCar.year} • {currentCar.brand} {currentCar.model}</span>
-            <span>{currentCar.mileage.toLocaleString()} km</span>
-          </div>
-          
-          <p className="text-gray-600 mb-4">{currentCar.description}</p>
-          
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Key Features</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {currentCar.features.map((feature, index) => (
-                <div key={index} className="flex items-center text-gray-600">
-                  <svg className="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>{feature}</span>
-                </div>
-              ))}
+    <div className="flex flex-col items-center w-full max-w-md mx-auto gap-8">
+      <div className="relative w-full">
+        <div 
+          className={`relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform duration-500 flex flex-col ${
+            direction === 'left' 
+              ? 'translate-x-[-150%] rotate-[-30deg]' 
+              : direction === 'right' 
+              ? 'translate-x-[150%] rotate-[30deg]' 
+              : ''
+          }`}
+        >
+          <div className="relative h-[260px] w-full shrink-0">
+            <Image
+              src={currentCar.imageUrl}
+              alt={`${currentCar.year} ${currentCar.brand} ${currentCar.model}`}
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-60" />
+            <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-lg font-bold shadow-lg">
+              {new Intl.NumberFormat('pl-PL', {
+                style: 'currency',
+                currency: 'PLN',
+                maximumFractionDigits: 0,
+              }).format(currentCar.price)}
             </div>
           </div>
           
-          <div className="flex items-center text-gray-600 mb-6">
-            <svg className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span>{currentCar.location}</span>
+          <div className="p-6 flex flex-col flex-grow overflow-y-auto">
+            <h2 className="text-2xl font-bold text-gray-800 mb-1">
+              {currentCar.title}
+            </h2>
+            
+            <div className="flex justify-between text-sm font-medium text-gray-500 mb-3">
+              <span>{currentCar.year} • {currentCar.brand} {currentCar.model}</span>
+              <span>{currentCar.mileage.toLocaleString()} km</span>
+            </div>
+            
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{currentCar.description}</p>
+            
+            <div className="mb-4 flex-grow">
+              <h3 className="text-sm font-semibold text-gray-800 mb-2 uppercase tracking-wide">Key Features</h3>
+              <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                {currentCar.features.slice(0, 4).map((feature, index) => (
+                  <div key={index} className="flex items-center text-xs text-gray-600">
+                    <svg className="h-3.5 w-3.5 mr-1.5 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="truncate">{feature}</span>
+                  </div>
+                ))}
+                {currentCar.features.length > 4 && (
+                  <div className="text-xs text-blue-600 font-medium pl-5">
+                    +{currentCar.features.length - 4} more
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="mt-auto pt-4 border-t border-gray-100">
+              <div className="flex items-center text-gray-600 mb-3 text-sm">
+                <svg className="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{currentCar.location}</span>
+              </div>
+              
+              <Link 
+                href={`/cars/${currentCar.id}`}
+                className="block w-full bg-blue-50 hover:bg-blue-100 text-center text-blue-700 py-3 rounded-lg font-semibold transition duration-200"
+              >
+                View Full Details
+              </Link>
+            </div>
           </div>
-          
-          <Link 
-            href={`/cars/${currentCar.id}`}
-            className="block w-full bg-gray-100 hover:bg-gray-200 text-center text-gray-800 py-3 rounded-lg font-medium transition"
-          >
-            View Full Details
-          </Link>
         </div>
       </div>
       
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-8">
+      <div className="flex justify-center space-x-8 pb-4">
         <button 
           onClick={handleDislike}
-          className="bg-white p-5 rounded-full shadow-lg hover:bg-gray-100 transition"
+          className="bg-white p-5 rounded-full shadow-lg hover:shadow-xl hover:bg-red-50 transition transform hover:-translate-y-1 border border-red-100 group"
+          aria-label="Dislike"
         >
-          <svg className="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-8 w-8 text-red-500 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         
         <button 
           onClick={handleLike}
-          className="bg-white p-5 rounded-full shadow-lg hover:bg-gray-100 transition"
+          className="bg-white p-5 rounded-full shadow-lg hover:shadow-xl hover:bg-green-50 transition transform hover:-translate-y-1 border border-green-100 group"
+          aria-label="Like"
         >
-          <svg className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-8 w-8 text-green-500 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
         </button>
