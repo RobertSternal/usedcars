@@ -176,33 +176,33 @@ export default function DiscoverPage() {
   return (
     <div className="bg-gray-50 min-h-screen py-16">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center mb-8">
+        <div className="max-w-5xl mx-auto text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Car Finder</h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 md:whitespace-nowrap">
             {isLoggedIn 
               ? "Personalized recommendations based on your preferences. Swipe right on cars you like!"
               : "Swipe right on cars you like, left on those you don't. Sign in for personalized recommendations!"
             }
           </p>
-          
-          {isLoggedIn && (
-            <div className="mt-4 flex justify-center space-x-4">
-              <Link
-                href="/preferences"
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm"
-              >
-                Update Preferences
-              </Link>
-              <div className="text-sm text-gray-600 bg-white px-4 py-2 rounded-md border">
-                Showing {filteredCars.length} cars matching your preferences
-              </div>
-            </div>
-          )}
         </div>
         
         <div className="flex justify-center">
           <CarSwiper cars={filteredCars} />
         </div>
+
+        {isLoggedIn && (
+          <div className="mt-8 flex justify-center space-x-4">
+            <Link
+              href="/preferences"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm"
+            >
+              Update Preferences
+            </Link>
+            <div className="text-sm text-gray-600 bg-white px-4 py-2 rounded-md border">
+              Showing {filteredCars.length} cars matching your preferences
+            </div>
+          </div>
+        )}
         
         <div className="mt-16 max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-8">
