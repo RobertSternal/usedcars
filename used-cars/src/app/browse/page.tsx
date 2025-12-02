@@ -1,28 +1,108 @@
 import type { Metadata } from 'next/types';
 import CarCard from '@/components/CarCard';
 import CarFilter from '@/components/CarFilter';
+import CarSort from '@/components/CarSort';
 import prisma from '@/lib/prisma';
 import { getCurrentUserId } from '@/app/actions/favorite';
+import { Prisma } from '@prisma/client';
 
 export const metadata: Metadata = {
   title: 'Browse Cars | UsedCars',
   description: 'Browse our extensive collection of quality used vehicles.',
 };
 
-async function getCars() {
+async function getCars(searchParams: { [key: string]: string | string[] | undefined }) {
   const userId = await getCurrentUserId();
 
   try {
+    // Build where clause
+    const where: Prisma.CarWhereInput = {
+      status: 'ACTIVE',
+    };
+
+    // Filter by Brand
+    if (searchParams.brand && typeof searchParams.brand === 'string') {
+      where.brand = { contains: searchParams.brand as string };
+    }
+
+    // Filter by Price
+    if (searchParams.minPrice || searchParams.maxPrice) {
+      where.price = {};
+      if (searchParams.minPrice) where.price.gte = Number(searchParams.minPrice);
+      if (searchParams.maxPrice) where.price.lte = Number(searchParams.maxPrice);
+    }
+
+    // Filter by Year
+    if (searchParams.minYear || searchParams.maxYear) {
+      where.year = {};
+      if (searchParams.minYear) where.year.gte = Number(searchParams.minYear);
+      if (searchParams.maxYear) where.year.lte = Number(searchParams.maxYear);
+    }
+
+    // Filter by Power
+    if (searchParams.minPower || searchParams.maxPower) {
+      where.power = {};
+      if (searchParams.minPower) where.power.gte = Number(searchParams.minPower);
+      if (searchParams.maxPower) where.power.lte = Number(searchParams.maxPower);
+    }
+
+    // Filter by Engine Size
+    if (searchParams.minEngineSize || searchParams.maxEngineSize) {
+      where.engineSize = {};
+      if (searchParams.minEngineSize) where.engineSize.gte = Number(searchParams.minEngineSize);
+      if (searchParams.maxEngineSize) where.engineSize.lte = Number(searchParams.maxEngineSize);
+    }
+
+    // Filter by Body Type
+    if (searchParams.bodyType && typeof searchParams.bodyType === 'string') {
+      const bodyTypes = searchParams.bodyType.split(',');
+      where.bodyType = { in: bodyTypes };
+    }
+
+    // Filter by Fuel Type
+    if (searchParams.fuelType && typeof searchParams.fuelType === 'string') {
+      const fuelTypes = searchParams.fuelType.split(',');
+      where.fuelType = { in: fuelTypes };
+    }
+
+    // Filter by Transmission
+    if (searchParams.transmission && typeof searchParams.transmission === 'string') {
+      const transmissions = searchParams.transmission.split(',');
+      where.transmission = { in: transmissions };
+    }
+
+    // Determine sorting
+    let orderBy: Prisma.CarOrderByWithRelationInput = { createdAt: 'desc' };
+    const sort = typeof searchParams.sort === 'string' ? searchParams.sort : 'newest';
+
+    switch (sort) {
+      case 'oldest':
+        orderBy = { createdAt: 'asc' };
+        break;
+      case 'price_low':
+        orderBy = { price: 'asc' };
+        break;
+      case 'price_high':
+        orderBy = { price: 'desc' };
+        break;
+      case 'mileage_low':
+        orderBy = { mileage: 'asc' };
+        break;
+      case 'newest':
+      default:
+        orderBy = { createdAt: 'desc' };
+        break;
+    }
+
     const cars = await prisma.car.findMany({
+      where,
       include: {
         images: {
           where: { isPrimary: true },
           take: 1
         }
       },
-      orderBy: {
-        createdAt: 'desc'
-      }
+      orderBy
     });
     
     // Get favorites for this user
@@ -53,8 +133,13 @@ async function getCars() {
   }
 }
 
-export default async function BrowsePage() {
-  const cars = await getCars();
+export default async function BrowsePage({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  const cars = await getCars(searchParams);
+  
   return (
     <div className="bg-gray-50 py-10">
       <div className="container mx-auto px-4">
@@ -80,16 +165,7 @@ export default async function BrowsePage() {
               
               <div className="flex items-center space-x-2">
                 <label htmlFor="sort" className="text-sm text-gray-600">Sort by:</label>
-                <select 
-                  id="sort"
-                  className="border border-gray-300 rounded-md p-2 text-sm text-gray-900 font-medium focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="price_low">Price: Low to High</option>
-                  <option value="price_high">Price: High to Low</option>
-                  <option value="mileage_low">Mileage: Low to High</option>
-                </select>
+                <CarSort />
               </div>
             </div>
             

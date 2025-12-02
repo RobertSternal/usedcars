@@ -1,14 +1,115 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function CarFilter() {
-  const [priceRange, setPriceRange] = useState([0, 500000]);
-  const [yearRange, setYearRange] = useState([1990, 2025]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [brand, setBrand] = useState(searchParams.get('brand') || '');
+  const [priceRange, setPriceRange] = useState([
+    Number(searchParams.get('minPrice')) || 0, 
+    Number(searchParams.get('maxPrice')) || 500000
+  ]);
+  const [yearRange, setYearRange] = useState([
+    Number(searchParams.get('minYear')) || 1990, 
+    Number(searchParams.get('maxYear')) || 2025
+  ]);
   const [engineExpanded, setEngineExpanded] = useState(false);
-  const [powerRange, setPowerRange] = useState([50, 500]);
-  const [capacityRange, setCapacityRange] = useState([1.0, 6.0]);
+  const [powerRange, setPowerRange] = useState([
+    Number(searchParams.get('minPower')) || 50, 
+    Number(searchParams.get('maxPower')) || 500
+  ]);
+  const [capacityRange, setCapacityRange] = useState([
+    Number(searchParams.get('minEngineSize')) || 1.0, 
+    Number(searchParams.get('maxEngineSize')) || 6.0
+  ]);
   
+  // Checkbox states
+  const [selectedBodyTypes, setSelectedBodyTypes] = useState<string[]>(
+    searchParams.get('bodyType')?.split(',').filter(Boolean) || []
+  );
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>(
+    searchParams.get('fuelType')?.split(',').filter(Boolean) || []
+  );
+  const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>(
+    searchParams.get('transmission')?.split(',').filter(Boolean) || []
+  );
+
+  // Sync state with URL params when they change (e.g. back/forward navigation)
+  useEffect(() => {
+    setBrand(searchParams.get('brand') || '');
+    setPriceRange([
+      Number(searchParams.get('minPrice')) || 0, 
+      Number(searchParams.get('maxPrice')) || 500000
+    ]);
+    setYearRange([
+      Number(searchParams.get('minYear')) || 1990, 
+      Number(searchParams.get('maxYear')) || 2025
+    ]);
+    setPowerRange([
+      Number(searchParams.get('minPower')) || 50, 
+      Number(searchParams.get('maxPower')) || 500
+    ]);
+    setCapacityRange([
+      Number(searchParams.get('minEngineSize')) || 1.0, 
+      Number(searchParams.get('maxEngineSize')) || 6.0
+    ]);
+    setSelectedBodyTypes(searchParams.get('bodyType')?.split(',').filter(Boolean) || []);
+    setSelectedFuelTypes(searchParams.get('fuelType')?.split(',').filter(Boolean) || []);
+    setSelectedTransmissions(searchParams.get('transmission')?.split(',').filter(Boolean) || []);
+  }, [searchParams]);
+
+  const handleCheckboxChange = (
+    value: string, 
+    currentState: string[], 
+    setState: (val: string[]) => void
+  ) => {
+    if (currentState.includes(value)) {
+      setState(currentState.filter(item => item !== value));
+    } else {
+      setState([...currentState, value]);
+    }
+  };
+
+  const handleApplyFilters = () => {
+    // Initialize with existing params to preserve sort order etc.
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (brand) params.set('brand', brand); else params.delete('brand');
+    
+    if (priceRange[0] > 0) params.set('minPrice', priceRange[0].toString()); else params.delete('minPrice');
+    if (priceRange[1] < 500000) params.set('maxPrice', priceRange[1].toString()); else params.delete('maxPrice');
+    
+    if (yearRange[0] > 1990) params.set('minYear', yearRange[0].toString()); else params.delete('minYear');
+    if (yearRange[1] < 2025) params.set('maxYear', yearRange[1].toString()); else params.delete('maxYear');
+    
+    if (powerRange[0] > 50) params.set('minPower', powerRange[0].toString()); else params.delete('minPower');
+    if (powerRange[1] < 500) params.set('maxPower', powerRange[1].toString()); else params.delete('maxPower');
+    
+    if (capacityRange[0] > 1.0) params.set('minEngineSize', capacityRange[0].toString()); else params.delete('minEngineSize');
+    if (capacityRange[1] < 6.0) params.set('maxEngineSize', capacityRange[1].toString()); else params.delete('maxEngineSize');
+
+    if (selectedBodyTypes.length > 0) params.set('bodyType', selectedBodyTypes.join(',')); else params.delete('bodyType');
+    if (selectedFuelTypes.length > 0) params.set('fuelType', selectedFuelTypes.join(',')); else params.delete('fuelType');
+    if (selectedTransmissions.length > 0) params.set('transmission', selectedTransmissions.join(',')); else params.delete('transmission');
+
+    router.push(`/browse?${params.toString()}`);
+  };
+
+  const handleReset = () => {
+    setBrand('');
+    setPriceRange([0, 500000]);
+    setYearRange([1990, 2025]);
+    setPowerRange([50, 500]);
+    setCapacityRange([1.0, 6.0]);
+    setSelectedBodyTypes([]);
+    setSelectedFuelTypes([]);
+    setSelectedTransmissions([]);
+    router.push('/browse');
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h3 className="text-lg font-bold text-gray-800 mb-4">Filter Options</h3>
@@ -18,7 +119,11 @@ export default function CarFilter() {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Brand
         </label>
-        <select className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        <select 
+          value={brand}
+          onChange={(e) => setBrand(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        >
           <option value="">All Brands</option>
           <option value="audi">Audi</option>
           <option value="bmw">BMW</option>
@@ -39,30 +144,17 @@ export default function CarFilter() {
           Body Type
         </label>
         <div className="grid grid-cols-2 gap-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Sedan</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">SUV</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Hatchback</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Coupe</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Convertible</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Wagon</span>
-          </label>
+          {['Sedan', 'SUV', 'Hatchback', 'Coupe', 'Convertible', 'Wagon'].map((type) => (
+            <label key={type} className="flex items-center space-x-2">
+              <input 
+                type="checkbox" 
+                checked={selectedBodyTypes.includes(type)}
+                onChange={() => handleCheckboxChange(type, selectedBodyTypes, setSelectedBodyTypes)}
+                className="rounded text-blue-600 focus:ring-blue-500" 
+              />
+              <span className="text-sm text-gray-700">{type}</span>
+            </label>
+          ))}
         </div>
       </div>
       
@@ -136,22 +228,17 @@ export default function CarFilter() {
           Fuel Type
         </label>
         <div className="grid grid-cols-2 gap-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Petrol</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Diesel</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Hybrid</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Electric</span>
-          </label>
+          {['Petrol', 'Diesel', 'Hybrid', 'Electric'].map((type) => (
+            <label key={type} className="flex items-center space-x-2">
+              <input 
+                type="checkbox" 
+                checked={selectedFuelTypes.includes(type)}
+                onChange={() => handleCheckboxChange(type, selectedFuelTypes, setSelectedFuelTypes)}
+                className="rounded text-blue-600 focus:ring-blue-500" 
+              />
+              <span className="text-sm text-gray-700">{type}</span>
+            </label>
+          ))}
         </div>
       </div>
       
@@ -248,23 +335,32 @@ export default function CarFilter() {
           Transmission
         </label>
         <div className="flex space-x-4">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Automatic</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-blue-600 focus:ring-blue-500" />
-            <span className="text-sm text-gray-700">Manual</span>
-          </label>
+          {['Automatic', 'Manual'].map((type) => (
+            <label key={type} className="flex items-center space-x-2">
+              <input 
+                type="checkbox" 
+                checked={selectedTransmissions.includes(type)}
+                onChange={() => handleCheckboxChange(type, selectedTransmissions, setSelectedTransmissions)}
+                className="rounded text-blue-600 focus:ring-blue-500" 
+              />
+              <span className="text-sm text-gray-700">{type}</span>
+            </label>
+          ))}
         </div>
       </div>
       
       {/* Action Buttons */}
       <div className="flex space-x-4">
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition">
+        <button 
+          onClick={handleApplyFilters}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition"
+        >
           Apply Filters
         </button>
-        <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md font-medium transition">
+        <button 
+          onClick={handleReset}
+          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md font-medium transition"
+        >
           Reset
         </button>
       </div>
