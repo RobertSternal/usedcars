@@ -141,11 +141,58 @@ export default function Navbar() {
           )}
           <button className="md:hidden" onClick={toggleMobileMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 absolute top-full left-0 right-0 shadow-lg py-2">
+          <div className="flex flex-col px-4 space-y-1">
+            <Link 
+              href="/" 
+              className="block py-3 text-gray-700 hover:text-blue-700 font-medium transition border-b border-gray-50 last:border-0" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/browse" 
+              className="block py-3 text-gray-700 hover:text-blue-700 font-medium transition border-b border-gray-50 last:border-0" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Browse Cars
+            </Link>
+            <Link 
+              href="/discover" 
+              className="block py-3 text-gray-700 hover:text-blue-700 font-medium transition border-b border-gray-50 last:border-0" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Car Finder
+            </Link>
+            <Link 
+              href="/sell" 
+              className="block py-3 text-gray-700 hover:text-blue-700 font-medium transition border-b border-gray-50 last:border-0" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Sell Your Car
+            </Link>
+            <Link 
+              href="/about" 
+              className="block py-3 text-gray-700 hover:text-blue-700 font-medium transition border-b border-gray-50 last:border-0" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
