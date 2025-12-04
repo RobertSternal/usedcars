@@ -22,13 +22,27 @@ async function getCars(searchParams: { [key: string]: string | string[] | undefi
 
     // Filter by keyword (make, model, title, etc.)
     if (searchParams.q && typeof searchParams.q === 'string') {
-      const query = searchParams.q;
-      where.OR = [
-        { brand: { contains: query } },
-        { model: { contains: query } },
-        { title: { contains: query } },
-        { description: { contains: query } }
-      ];
+      const terms = searchParams.q.split(/\s+/).filter(term => term.length > 0);
+      
+      if (terms.length > 0) {
+        where.AND = terms.map(term => {
+          const orConditions: Prisma.CarWhereInput[] = [
+            { brand: { contains: term } },
+            { model: { contains: term } },
+            { title: { contains: term } },
+            { description: { contains: term } },
+            { color: { contains: term } }
+          ];
+          
+          // Check if term is a number (for year)
+          const numTerm = parseInt(term);
+          if (!isNaN(numTerm)) {
+            orConditions.push({ year: { equals: numTerm } });
+          }
+          
+          return { OR: orConditions };
+        });
+      }
     }
 
     // Filter by Brand
