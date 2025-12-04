@@ -20,6 +20,17 @@ async function getCars(searchParams: { [key: string]: string | string[] | undefi
       status: 'ACTIVE',
     };
 
+    // Filter by keyword (make, model, title, etc.)
+    if (searchParams.q && typeof searchParams.q === 'string') {
+      const query = searchParams.q;
+      where.OR = [
+        { brand: { contains: query } },
+        { model: { contains: query } },
+        { title: { contains: query } },
+        { description: { contains: query } }
+      ];
+    }
+
     // Filter by Brand
     if (searchParams.brand && typeof searchParams.brand === 'string') {
       where.brand = { contains: searchParams.brand as string };

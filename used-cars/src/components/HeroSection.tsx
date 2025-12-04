@@ -1,7 +1,28 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HeroSection() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      router.push(`/browse?q=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      router.push('/browse');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="relative h-[600px] w-full overflow-hidden">
       {/* Background Image */}
@@ -32,8 +53,14 @@ export default function HeroSection() {
                 type="text"
                 placeholder="Search by make, model, or keyword"
                 className="flex-grow px-4 py-3 rounded-md border border-white/60 bg-black/40 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
-              <button className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-md font-medium transition">
+              <button 
+                onClick={handleSearch}
+                className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-md font-medium transition"
+              >
                 Search Cars
               </button>
             </div>
