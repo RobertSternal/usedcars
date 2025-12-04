@@ -127,12 +127,17 @@ export default function CarFilter() {
           <option value="">All Brands</option>
           <option value="audi">Audi</option>
           <option value="bmw">BMW</option>
+          <option value="chevrolet">Chevrolet</option>
+          <option value="dodge">Dodge</option>
+          <option value="ferrari">Ferrari</option>
           <option value="ford">Ford</option>
           <option value="honda">Honda</option>
           <option value="hyundai">Hyundai</option>
+          <option value="jaguar">Jaguar</option>
           <option value="mazda">Mazda</option>
           <option value="mercedes">Mercedes-Benz</option>
           <option value="nissan">Nissan</option>
+          <option value="porsche">Porsche</option>
           <option value="toyota">Toyota</option>
           <option value="volkswagen">Volkswagen</option>
         </select>

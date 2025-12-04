@@ -20,7 +20,7 @@ interface UserPreferences {
   maxDistanceKm?: number;
 }
 
-const brands = ['BMW', 'Audi', 'Mercedes-Benz', 'Volkswagen', 'Toyota', 'Honda', 'Ford', 'Opel', 'Skoda', 'Hyundai', 'Kia', 'Nissan', 'Mazda', 'Volvo', 'Peugeot', 'Renault'];
+const brands = ['Audi', 'BMW', 'Chevrolet', 'Dodge', 'Ferrari', 'Ford', 'Honda', 'Hyundai', 'Jaguar', 'Kia', 'Mazda', 'Mercedes-Benz', 'Nissan', 'Opel', 'Peugeot', 'Porsche', 'Renault', 'Skoda', 'Toyota', 'Volkswagen', 'Volvo'];
 const bodyTypes = ['SEDAN', 'HATCHBACK', 'SUV', 'COUPE', 'CONVERTIBLE', 'WAGON', 'VAN', 'TRUCK'];
 const fuelTypes = ['PETROL', 'DIESEL', 'ELECTRIC', 'HYBRID', 'LPG'];
 const transmissionTypes = ['ANY', 'MANUAL', 'AUTOMATIC', 'SEMI_AUTOMATIC'];
