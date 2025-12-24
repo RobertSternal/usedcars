@@ -203,12 +203,12 @@ export default function CarSwiper({ cars }: CarSwiperProps) {
           </div>
           
           <div className="p-6 flex flex-col flex-grow overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800 mb-1">
+            <h2 className="text-2xl font-bold text-gray-800 mb-1 capitalize">
               {currentCar.title}
             </h2>
             
             <div className="flex justify-between text-sm font-medium text-gray-500 mb-3">
-              <span>{currentCar.year} • {currentCar.brand} {currentCar.model}</span>
+              <span>{currentCar.year} • <span className="capitalize">{currentCar.brand}</span> {currentCar.model}</span>
               <span>{currentCar.mileage.toLocaleString()} km</span>
             </div>
             

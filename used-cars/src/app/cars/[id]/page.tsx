@@ -232,7 +232,7 @@ export default async function CarDetailPage(props: any) {
                       <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                         <div>
                           <span className="text-gray-500">Brand</span>
-                          <p className="font-medium">{car.brand}</p>
+                          <p className="font-medium capitalize">{car.brand}</p>
                         </div>
                         <div>
                           <span className="text-gray-500">Model</span>

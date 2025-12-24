@@ -48,11 +48,11 @@ export default function CarCard({
       </Link>
       
       <div className="p-3 bg-white">
-        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition truncate">
+        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition truncate capitalize">
           {title}
         </h3>
         
-        <p className="text-gray-600 text-sm">{year} • {brand} {model}</p>
+        <p className="text-gray-600 text-sm">{year} • <span className="capitalize">{brand}</span> {model}</p>
         
         <div className="flex justify-between mt-2">
           <div className="flex items-center text-sm text-gray-500">
